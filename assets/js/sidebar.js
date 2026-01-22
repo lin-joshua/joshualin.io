@@ -44,7 +44,7 @@ document.addEventListener('DOMContentLoaded', () => {
         <div class="contact-info">
           <p class="contact-title">Email</p>
 
-          <a href="mailto:joshua.lin@princeton.edu" class="contact-link">joshua.lin@princeton.edu</a>
+          <a href="mailto:" class="contact-link">joshua [dot] lin [att] princeton edu</a>
         </div>
 
       </li>
