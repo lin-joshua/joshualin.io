@@ -86,7 +86,7 @@ document.addEventListener('DOMContentLoaded', () => {
         <div class="contact-info">
           <p class="contact-title">Location</p>
 
-          <address>New Jersey, USA</address>
+          <address>Greater New York Area</address>
         </div>
 
       </li>
