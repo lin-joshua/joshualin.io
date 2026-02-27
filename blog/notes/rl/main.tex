@@ -557,16 +557,16 @@
         preventing the policy from moving too aggressively toward good actions. 
         \item If \(\widehat{\mathbb{A}}_t < 0\) (action was worse than expected): decreasing \(\rho_t\) improves the surrogate up to a factor of \(1 - \varepsilon\). Here, 
         \[
-            \min(\rho_t \hat{A}_t, (1-\varepsilon)\hat{A}_t) = \max(\rho_t, 1-\varepsilon) \hat{A}_t
+            \min(\rho_t \widehat{\mathbb{A}}_t, (1-\varepsilon)\widehat{\mathbb{A}}_t) = \max(\rho_t, 1-\varepsilon) \widehat{\mathbb{A}}_t
         \]
         preventing the policy from moving too far from bad actions. 
     \end{itemize}
-    In both cases, the gradient is zero outside the trust region \(\rho_t \in [1-\varepsilon, 1+\varepsilon]\), providing a ``soft wall'' analogous to TRPO's hard KL constraint. Crucially, the clipped objective is a \textit{pessimistic} (lower) bound on the unclipped surrogate, so the optimization never exploits overconfident advantage estimates.
+    In both cases, the gradient is zero outside the trust region \(\rho_t \in [1-\varepsilon, 1+\varepsilon]\), providing a ``soft wall'' analogous to TRPO's hard KL constraint. Crucially, the clipped objective is a \textit{pessimistic} lower bound on the unclipped surrogate, so PPO never exploits overconfident advantage estimates.
 
     \textbf{Notes.} We discuss several important details. 
     \begin{itemize}
-        \item \textit{Minibatch updates.} Unlike TRPO (which performs a single constrained step per batch of data), PPO performs multiple epochs of minibatch SGD on the same batch of trajectories. This is the primary source of its sample efficiency gains. The clipping mechanism ensures that each epoch does not stray too far from the data-collecting policy, even without an explicit constraint. 
-        \item \textit{Entropy bonus.} The term \(c_2 H(\pi_{\theta'})\) encourages exploration by penalizing deterministic policies. Without it, the policy can prematurely converge to a suboptimal deterministic action. This is especially important in environments with sparse or deceptive rewards.
+        \item \textit{Minibatch updates.} Unlike TRPO (which performs a single constrained step per batch of data), PPO performs multiple epochs of minibatch SGD on the same batch of trajectories. This is the primary source of its sample efficiency gains. Clipping ensures that each epoch does not stray too far from the data-collecting policy, even without an explicit constraint. 
+        \item \textit{Entropy bonus.} The term \(\beta H(\pi_{\theta'})\) encourages exploration by penalizing deterministic policies. Without it, the policy can prematurely converge to a suboptimal deterministic action. This is especially important in environments with sparse or deceptive rewards.
         \item \textit{Value function clipping.} In some implementations (e.g., the original PPO paper), the value function loss is also clipped: 
         \[
             \mathcal{L}^{\text{VF,clip}}(\phi) = \mathbb{E}\left[\max\left((V_\phi(s_t) - R_t)^2,\; (V_{\phi_{\text{old}}}(s_t) + \text{clip}(\Delta V, -\varepsilon, \varepsilon) - R_t)^2\right)\right]
@@ -599,15 +599,15 @@
     \State Initialize hyperparameters: learning rate \(\alpha\), clip range \(\varepsilon\), GAE parameter \(\lambda\), number of epochs \(K\), minibatch size \(M\)
     \For{\(iteration = 0, \dots, \text{MAX\_ITER}\)}
         \State Collect a batch of trajectories \(\mathcal{D} = \{\tau_i\}\) using \(\pi_\theta\) 
-        \State Compute advantages \(\hat{A}_t^{\text{GAE}(\gamma,\lambda)}\) for all \((s_t, a_t) \in \mathcal{D}\) using \(V_\phi\)
-        \State Normalize advantages: \(\hat{A}_t \leftarrow (\hat{A}_t - \mu_{\hat{A}}) / \sigma_{\hat{A}}\) over the batch
+        \State Compute GAE advantages \(\widehat{\mathbb{A}}_t\) for all \((s_t, a_t) \in \mathcal{D}\) using \(V_\phi\)
+        \State Normalize advantages: \(\widehat{\mathbb{A}}_t \leftarrow (\widehat{\mathbb{A}}_t - \mu_{\widehat{\mathbb{A}}}) / \sigma_{\widehat{\mathbb{A}}}\) over the batch
         \For{\(epoch = 1, \dots, K\)}
             \For{each minibatch \(\mathcal{B} \subset \mathcal{D}\) of size \(M\)}
                 \State Compute ratios \(\rho_t(\theta') = \pi_{\theta'}(a_t \mid s_t) / \pi_\theta(a_t \mid s_t)\) for all \(t \in \mathcal{B}\) 
-                \State Compute clipped surrogate: \(L^{\text{CLIP}} = \frac{1}{|\mathcal{B}|}\sum_{t \in \mathcal{B}} \min(\rho_t \hat{A}_t, \text{clip}(\rho_t, 1{-}\varepsilon, 1{+}\varepsilon)\hat{A}_t)\) 
+                \State Compute clipped surrogate: \(L^{\text{CLIP}} = \frac{1}{|\mathcal{B}|}\sum_{t \in \mathcal{B}} \min(\rho_t \widehat{\mathbb{A}}_t, \text{clip}(\rho_t, 1{-}\varepsilon, 1{+}\varepsilon)\widehat{\mathbb{A}}_t)\) 
                 \State Compute value loss: \(\mathcal{L}^{\text{VF}} = \frac{1}{|\mathcal{B}|}\sum_{t \in \mathcal{B}} (V_\phi(s_t) - R_t)^2\)
                 \State Compute entropy bonus: \(H = \frac{1}{|\mathcal{B}|}\sum_{t \in \mathcal{B}} H(\pi_{\theta'}(\cdot \mid s_t))\)
-                \State \((\theta', \phi) \leftarrow (\theta', \phi) - \alpha \nabla_{(\theta', \phi)} (-L^{\text{CLIP}} + c_1 \mathcal{L}^{\text{VF}} - c_2 H)\)
+                \State \((\theta', \phi) \leftarrow (\theta', \phi) - \alpha \nabla_{(\theta', \phi)} (-L^{\text{CLIP}} + \alpha \mathcal{L}^{\text{VF}} - \beta H)\)
             \EndFor
         \EndFor
         \State \(\theta \leftarrow \theta'\)
@@ -619,11 +619,11 @@
 \begin{remark}
     \textbf{Notes.} Advantage normalization (Line 6) is a critical implementation detail: it centers the advantages to have zero mean and unit variance across the batch, ensuring that roughly half the actions are reinforced and half are suppressed, regardless of the absolute scale of returns. This is conceptually related to the average reward baseline discussed in REINFORCE. 
 
-    Standard hyperparameters (from the original paper and subsequent best practices) are \(\varepsilon = 0.2\), \(\lambda = 0.95\), \(\gamma = 0.99\), \(K = 3\text{--}10\) epochs, and \(c_1 = 0.5\), \(c_2 = 0.01\). The number of epochs \(K\) must be tuned carefully: too few epochs waste data, while too many can degrade performance as the ratio \(\rho_t\) drifts and the advantage estimates become stale.
+    Standard hyperparameters (from the original paper and subsequent best practices) are \(\varepsilon = 0.2\), \(\lambda = 0.95\), \(\gamma = 0.99\), \(K = 3\text{--}10\) epochs, and \(\alpha = 0.5\), \(\beta = 0.01\). The number of epochs \(K\) must be tuned carefully: too few epochs waste data, while too many can degrade performance as the ratio \(\rho_t\) drifts and the advantage estimates become stale.
 
     \textbf{PPO-Penalty.} An alternative formulation replaces clipping with a soft KL penalty, 
     \[
-        L^{\text{KL}}(\theta') = \mathbb{E}_{\tau \sim \pi_\theta}\left[\sum_{t=0}^T \rho_t(\theta') \hat{A}_t\right] - \beta \TKL{\pi_\theta}{\pi_{\theta'}}
+        L^{\text{KL}}(\theta') = \mathbb{E}_{\tau \sim \pi_\theta}\left[\sum_{t=0}^T \rho_t(\theta') \widehat{\mathbb{A}}_t\right] - \beta \TKL{\pi_\theta}{\pi_{\theta'}}
     \]
     where \(\beta > 0\) is an adaptive penalty coefficient. When the KL divergence exceeds \(1.5\delta\), \(\beta\) is doubled; when it falls below \(\delta / 1.5\), \(\beta\) is halved. While this variant is closer to TRPO in spirit (directly penalizing distributional shift), PPO-Clip generally outperforms it empirically, suggesting that the pessimistic clipping mechanism is a more robust proxy for trust region enforcement than a tuned penalty.
 \end{remark}

@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.141592653-2.6-1.40.27 (TeX Live 2025) (preloaded format=pdflatex 2025.3.8)  27 FEB 2026 17:25
+This is pdfTeX, Version 3.141592653-2.6-1.40.27 (TeX Live 2025) (preloaded format=pdflatex 2025.3.8)  27 FEB 2026 17:40
 entering extended mode
  restricted \write18 enabled.
  %&-line parsing enabled.
@@ -908,8 +908,7 @@ LaTeX Font Info:    Trying to load font information for T1+ppl on input line 88
 
 (/usr/local/texlive/2025/texmf-dist/tex/latex/psnfss/t1ppl.fd
 File: t1ppl.fd 2001/06/04 font definitions for T1/ppl.
-) (./main.aux
-(./cover.pdf.aux))
+) (./main.aux)
 \openout1 = `main.aux'.
 
 LaTeX Font Info:    Checking defaults for OML/cmm/m/it on input line 88.
@@ -1215,6 +1214,15 @@ Package fancyhdr Warning: \headheight is too small (12.0pt):
 (fancyhdr)                \addtolength{\topmargin}{-1.59999pt}.
 
 [12]
+Overfull \hbox (1.54338pt too wide) in paragraph at lines 607--608
+[] \T1/ppl/m/n/10.95 Com-pute clipped sur-ro-gate: $\OML/zplm/m/it/10.95 L[] \O
+T1/zplm/m/n/10.95 = [] [][] [](\OML/zplm/m/it/10.95 ^^Z[][]\OT1/ppl/m/n/10.95 ,
+ []\OT1/zplm/m/n/10.95 (\OML/zplm/m/it/10.95 ^^Z[]\OT1/ppl/m/n/10.95 , 1[]\OML/
+zplm/m/it/10.95 "\OT1/ppl/m/n/10.95 , 1[]\OML/zplm/m/it/10.95 "\OT1/zplm/m/n/10
+.95 )[])$ 
+ []
+
+
 
 
 Package fancyhdr Warning: \headheight is too small (12.0pt): 
@@ -1241,11 +1249,11 @@ Package rerunfilecheck Info: File `main.out' has not changed.
 (rerunfilecheck)             Checksum: C0D46C2F8506D7E972042356779061A5;870.
  ) 
 Here is how much of TeX's memory you used:
- 32347 strings out of 473190
- 641254 string characters out of 5715801
- 1063842 words of memory out of 5000000
- 54994 multiletter control sequences out of 15000+600000
- 602785 words of font info for 136 fonts, out of 8000000 for 9000
+ 32344 strings out of 473190
+ 641164 string characters out of 5715801
+ 1063118 words of memory out of 5000000
+ 54990 multiletter control sequences out of 15000+600000
+ 603698 words of font info for 140 fonts, out of 8000000 for 9000
  1141 hyphenation exceptions out of 8191
  98i,18n,101p,569b,1320s stack positions out of 10000i,1000n,20000p,200000b,200000s
 </usr/local/texlive/2025/texmf-dist/fonts/type1/public/amsfonts/cm/cmex10.pfb
@@ -1259,7 +1267,7 @@ ive/2025/texmf-dist/fonts/type1/public/amsfonts/symbols/msam10.pfb></usr/local/
 texlive/2025/texmf-dist/fonts/type1/urw/palatino/uplb8a.pfb></usr/local/texlive
 /2025/texmf-dist/fonts/type1/urw/palatino/uplr8a.pfb></usr/local/texlive/2025/t
 exmf-dist/fonts/type1/urw/palatino/uplri8a.pfb>
-Output written on main.pdf (14 pages, 406378 bytes).
+Output written on main.pdf (14 pages, 406076 bytes).
 PDF statistics:
  198 PDF objects out of 1000 (max. 8388607)
  130 compressed objects within 2 object streams

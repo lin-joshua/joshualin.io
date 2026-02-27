@@ -1,9 +1,0 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 400 300">
-  <rect width="400" height="300" fill="hsl(240,2%,13%)"/>
-  <text x="200" y="125" text-anchor="middle" font-family="Georgia,serif" font-size="80" font-weight="bold"
-    fill="hsl(45,100%,72%)">RL</text>
-  <text x="200" y="178" text-anchor="middle" font-family="Georgia,serif" font-size="21"
-    fill="hsl(0,0%,84%)">Reinforcement Learning</text>
-  <text x="200" y="214" text-anchor="middle" font-family="Georgia,serif" font-size="15"
-    fill="hsl(0,0%,55%)">Foundational Notes</text>
-</svg>
