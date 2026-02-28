@@ -1,5 +1,5 @@
 # Fdb version 4
-["pdflatex"] 1772143952.97817 "main.tex" "main.pdf" "main" 1772143954.91748 0
+["pdflatex"] 1772254555.36417 "main.tex" "main.pdf" "main" 1772254557.25862 0
   "/usr/local/texlive/2025/texmf-dist/fonts/enc/dvips/base/8r.enc" 1165713224 4850 80dc9bab7f31fb78a000ccfed0e27cab ""
   "/usr/local/texlive/2025/texmf-dist/fonts/map/fontname/texfonts.map" 1577235249 3524 cb3e574dea2d1052e39280babc910dc8 ""
   "/usr/local/texlive/2025/texmf-dist/fonts/tfm/adobe/palatino/pplb8r.tfm" 1136768653 2532 9ad73cf4dd2173a847f2a5f5608e0b9a ""
@@ -138,6 +138,7 @@
   "/usr/local/texlive/2025/texmf-dist/tex/latex/enumitem/enumitem.sty" 1738874546 52272 63d293bc0d496619edb57585740861a2 ""
   "/usr/local/texlive/2025/texmf-dist/tex/latex/environ/environ.sty" 1399239813 4378 f429f0da968c278653359293040a8f52 ""
   "/usr/local/texlive/2025/texmf-dist/tex/latex/epstopdf-pkg/epstopdf-base.sty" 1579991033 13886 d1306dcf79a944f6988e688c1785f9ce ""
+  "/usr/local/texlive/2025/texmf-dist/tex/latex/eso-pic/eso-pic.sty" 1683144721 11876 6ef493863ae0d7a984706973240c2237 ""
   "/usr/local/texlive/2025/texmf-dist/tex/latex/etoolbox/etoolbox.sty" 1739306980 46850 d87daedc2abdc653769a6f1067849fe0 ""
   "/usr/local/texlive/2025/texmf-dist/tex/latex/fancyhdr/fancyhdr.sty" 1739048179 31715 19e60610b63819fe670dfa1cd84a4e94 ""
   "/usr/local/texlive/2025/texmf-dist/tex/latex/float/float.sty" 1137110151 6749 16d2656a1984957e674b149555f1ea1d ""
@@ -149,6 +150,7 @@
   "/usr/local/texlive/2025/texmf-dist/tex/latex/graphics/graphics.sty" 1730496337 18363 dee506cb8d56825d8a4d020f5d5f8704 ""
   "/usr/local/texlive/2025/texmf-dist/tex/latex/graphics/graphicx.sty" 1717359999 8010 6f2ad8c2b2ffbd607af6475441c7b5e4 ""
   "/usr/local/texlive/2025/texmf-dist/tex/latex/graphics/keyval.sty" 1717359999 2671 70891d50dac933918b827d326687c6e8 ""
+  "/usr/local/texlive/2025/texmf-dist/tex/latex/graphics/lscape.sty" 1717359999 1822 ce7e39e35ea3027d24b527bd5c5034d5 ""
   "/usr/local/texlive/2025/texmf-dist/tex/latex/graphics/mathcolor.ltx" 1667332637 2885 9c645d672ae17285bba324998918efd8 ""
   "/usr/local/texlive/2025/texmf-dist/tex/latex/graphics/trig.sty" 1717359999 4023 2c9f39712cf7b43d3eb93a8bbd5c8f67 ""
   "/usr/local/texlive/2025/texmf-dist/tex/latex/hycolor/hycolor.sty" 1580250785 17914 4c28a13fc3d975e6e81c9bea1d697276 ""
@@ -174,6 +176,10 @@
   "/usr/local/texlive/2025/texmf-dist/tex/latex/optidef/optidef.sty" 1556836755 24625 1f9a54f633aad013cc9fd957e79ea7ee ""
   "/usr/local/texlive/2025/texmf-dist/tex/latex/parskip/parskip.sty" 1615762720 4288 94714aa7f535440f33181fec52a31963 ""
   "/usr/local/texlive/2025/texmf-dist/tex/latex/pdfcol/pdfcol.sty" 1663877585 8086 ac143843b6ea88d172677dc3ed532925 ""
+  "/usr/local/texlive/2025/texmf-dist/tex/latex/pdflscape/pdflscape-nometadata.sty" 1667072951 6572 ea530fbbe537629fd97736d33babc07d ""
+  "/usr/local/texlive/2025/texmf-dist/tex/latex/pdflscape/pdflscape.sty" 1667072951 2224 1230ab76aa62221ccbd90bca8c8c015e ""
+  "/usr/local/texlive/2025/texmf-dist/tex/latex/pdfpages/pdfpages.sty" 1738442568 56557 52caee30c1fe86973ee17a572171abb0 ""
+  "/usr/local/texlive/2025/texmf-dist/tex/latex/pdfpages/pppdftex.def" 1738442568 6446 d89a65b3f6b4b32146b499348640e1cf ""
   "/usr/local/texlive/2025/texmf-dist/tex/latex/pgf/basiclayer/pgf.sty" 1601326656 1090 bae35ef70b3168089ef166db3e66f5b2 ""
   "/usr/local/texlive/2025/texmf-dist/tex/latex/pgf/basiclayer/pgfcore.sty" 1673816307 373 00b204b1d7d095b892ad31a7494b0373 ""
   "/usr/local/texlive/2025/texmf-dist/tex/latex/pgf/compatibility/pgfcomp-version-0-65.sty" 1601326656 21013 f4ff83d25bb56552493b030f27c075ae ""
@@ -226,9 +232,10 @@
   "/usr/local/texlive/2025/texmf-var/fonts/map/pdftex/updmap/pdftex.map" 1746715121 5467155 19efa205003f9ecad95fbbaa6ff24da1 ""
   "/usr/local/texlive/2025/texmf-var/web2c/pdftex/pdflatex.fmt" 1741450574 3345740 46b66fdb0378f7bf5921b5eabf1762b8 ""
   "/usr/local/texlive/2025/texmf.cnf" 1741450484 577 418a7058ec8e006d8704f60ecd22c938 ""
-  "main.aux" 1772143954.81949 893 32b2fe8206aa04352cae196acd7413a7 "pdflatex"
-  "main.out" 1772143954.82325 870 c0d46c2f8506d7e972042356779061a5 "pdflatex"
-  "main.tex" 1772143951.16119 43064 b65991f1f76d06868bb5715f81644912 ""
+  "cover.pdf" 1772231258.09637 216177 0b977fc6c9cd6bdbe6ffa4b58b92bd7e ""
+  "main.aux" 1772254557.17221 894 ee9aef40c4d9fc113e4d8ae44af9faef "pdflatex"
+  "main.out" 1772254557.176 870 c0d46c2f8506d7e972042356779061a5 "pdflatex"
+  "main.tex" 1772254554.93924 43400 cf8831c75c44f20e8ae85725ff8bb153 ""
   (generated)
   "main.aux"
   "main.log"

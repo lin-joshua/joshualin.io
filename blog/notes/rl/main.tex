@@ -541,7 +541,7 @@
     \[
         \boxed{
             \mathcal{L}^{\text{PPO}}(\theta', \phi) 
-            = -\mathcal{L}^{\text{CLIP}}(\theta') + \alpha \mathcal{L}^{\text{VF}}(\phi) - \beta \mathcal{H}(\theta')
+            = -\mathcal{L}^{\text{CLIP}}(\theta') + c_1 \mathcal{L}^{\text{VF}}(\phi) - c_2 \mathcal{H}(\theta')
         }
     \]
     for \(\alpha, \beta > 0\) weighting coefficients. 
@@ -604,10 +604,10 @@
         \For{\(epoch = 1, \dots, K\)}
             \For{each minibatch \(\mathcal{B} \subset \mathcal{D}\) of size \(M\)}
                 \State Compute ratios \(\rho_t(\theta') = \pi_{\theta'}(a_t \mid s_t) / \pi_\theta(a_t \mid s_t)\) for all \(t \in \mathcal{B}\) 
-                \State Compute clipped surrogate: \(L^{\text{CLIP}} = \frac{1}{|\mathcal{B}|}\sum_{t \in \mathcal{B}} \min(\rho_t \widehat{\mathbb{A}}_t, \text{clip}(\rho_t, 1{-}\varepsilon, 1{+}\varepsilon)\widehat{\mathbb{A}}_t)\) 
+                \State Compute clipped surrogate: \(\mathcal{L}^{\text{CLIP}} = \frac{1}{|\mathcal{B}|}\sum_{t \in \mathcal{B}} \min(\rho_t \widehat{\mathbb{A}}_t, \text{clip}(\rho_t, 1{-}\varepsilon, 1{+}\varepsilon)\widehat{\mathbb{A}}_t)\) 
                 \State Compute value loss: \(\mathcal{L}^{\text{VF}} = \frac{1}{|\mathcal{B}|}\sum_{t \in \mathcal{B}} (V_\phi(s_t) - R_t)^2\)
-                \State Compute entropy bonus: \(H = \frac{1}{|\mathcal{B}|}\sum_{t \in \mathcal{B}} H(\pi_{\theta'}(\cdot \mid s_t))\)
-                \State \((\theta', \phi) \leftarrow (\theta', \phi) - \alpha \nabla_{(\theta', \phi)} (-L^{\text{CLIP}} + \alpha \mathcal{L}^{\text{VF}} - \beta H)\)
+                \State Compute entropy bonus: \(\mathcal{H} = \frac{1}{|\mathcal{B}|}\sum_{t \in \mathcal{B}} H(\pi_{\theta'}(\cdot \mid s_t))\)
+                \State \((\theta', \phi) \leftarrow (\theta', \phi) - \alpha \nabla_{(\theta', \phi)} (-\mathcal{L}^{\text{CLIP}} + c_1 \mathcal{L}^{\text{VF}} - c_2 \mathcal{H})\)
             \EndFor
         \EndFor
         \State \(\theta \leftarrow \theta'\)
@@ -623,7 +623,7 @@
 
     \textbf{PPO-Penalty.} An alternative formulation replaces clipping with a soft KL penalty, 
     \[
-        L^{\text{KL}}(\theta') = \mathbb{E}_{\tau \sim \pi_\theta}\left[\sum_{t=0}^T \rho_t(\theta') \widehat{\mathbb{A}}_t\right] - \beta \TKL{\pi_\theta}{\pi_{\theta'}}
+        \mathcal{L}^{\text{KL}}(\theta') = \mathbb{E}_{\tau \sim \pi_\theta}\left[\sum_{t=0}^T \rho_t(\theta') \widehat{\mathbb{A}}_t\right] - \beta \TKL{\pi_\theta}{\pi_{\theta'}}
     \]
     where \(\beta > 0\) is an adaptive penalty coefficient. When the KL divergence exceeds \(1.5\delta\), \(\beta\) is doubled; when it falls below \(\delta / 1.5\), \(\beta\) is halved. While this variant is closer to TRPO in spirit (directly penalizing distributional shift), PPO-Clip generally outperforms it empirically, suggesting that the pessimistic clipping mechanism is a more robust proxy for trust region enforcement than a tuned penalty.
 \end{remark}
