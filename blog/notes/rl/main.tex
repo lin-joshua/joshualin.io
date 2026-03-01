@@ -160,11 +160,11 @@
         \item \textbf{Experience replay.} Transitions \((s_t, a_t, r_t, s_{t+1})\) are stored in a replay buffer \(\mathcal{D}\) and sampled uniformly at random for training. This breaks temporal correlations between consecutive samples and improves data efficiency.
         \item \textbf{Target network.} A separate target network \(Q_{\phi^-}\) with parameters \(\phi^-\) is used to compute TD targets, with \(\phi^-\) updated slowly (either by periodic copying or Polyak averaging \(\phi^- \leftarrow \tau \phi + (1 - \tau)\phi^-\)).
     \end{itemize}
-    The loss minimized is the mean squared Bellman error over minibatches from the replay buffer,
+    The loss is the mean squared Bellman error over minibatches from the replay buffer,
     \[
         \mathcal{L}(\phi) = \mathbb{E}_{(s,a,r,s') \sim \mathcal{D}} \left[ \left( r + \gamma \max_{a'} Q_{\phi^-}(s', a') - Q_\phi(s, a) \right)^2 \right]
     \]
-    The agent acts \(\varepsilon\)-greedily with respect to \(Q_\phi\), typically with \(\varepsilon\) annealed from \(1.0\) to \(0.1\) over training.
+    The agent acts \(\varepsilon\)-greedily with respect to \(Q_\phi\), typically with \(\varepsilon\) annealed from \(1.0\) to \(0.1\).
 \end{concept}
 
 \begin{remark}
