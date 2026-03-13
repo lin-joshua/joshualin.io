@@ -1,0 +1,86 @@
+% --- Geometry & Layout ---
+\usepackage[margin=1in]{geometry}
+\usepackage{parskip}  % Adds spacing between paragraphs automatically
+\usepackage{enumitem} % Adds extra formatting options for itemized lists
+\usepackage{hyperref} % Allows URL insertion
+\hypersetup{
+    colorlinks=true,
+    linkcolor=teal,
+    filecolor=magenta,      
+    urlcolor=cyan,
+    pdftitle={Overleaf Example},
+    pdfpagemode=FullScreen,
+}
+\usepackage{pdfpages}
+
+% --- Fonts ---
+\usepackage[T1]{fontenc}
+\usepackage{tgpagella}       % TeX Gyre Pagella (Text)
+\usepackage{mathpazo}        % Palatino math font to match Pagella
+
+% --- Math & Symbols ---
+\usepackage{amsmath, amssymb, amsthm}
+\usepackage{mathtools}
+\usepackage{algorithm, algpseudocode}
+\usepackage{caption}
+\usepackage{float}
+\usepackage{optidef}
+
+% --- Custom Operators ---
+\DeclareMathOperator*{\argmax}{argmax}
+\DeclareMathOperator*{\argmin}{argmin}
+\DeclareMathOperator*{\maximize}{maximize}
+\DeclareMathOperator*{\minimize}{minimize}
+\DeclarePairedDelimiterX{\infdivx}[2]{[}{]}{%
+  #1\;\delimsize\|\;#2%
+}
+\newcommand{\KL}{\mathbb{D}_{\text{KL}}\infdivx}
+\newcommand{\TKL}{\widetilde{\mathbb{D}}_{\text{KL}}\infdivx}
+\DeclarePairedDelimiter{\norm}{\lVert}{\rVert}
+\let\geq\geqslant
+\let\leq\leqslant
+\let\succeq\succcurlyeq
+\let\preceq\preccurlyeq
+
+% --- Colors & Graphics ---
+\usepackage{xcolor}
+\usepackage[most]{tcolorbox} % For the gray problem boxes
+
+% --- Header/Footer ---
+\usepackage{fancyhdr}
+\pagestyle{fancy}
+\fancyhf{}
+\fancyhead[L]{Joshua Lin}
+\fancyhead[C]{Reinforcement Learning}   % Change this per course
+\fancyhead[R]{Foundational Notes} % Change this per assignment
+\renewcommand{\headrulewidth}{0.4pt}
+\cfoot{\thepage}
+
+% --- Custom Problem Box ---
+% Usage: \begin{problem}[Optional Title] ... \end{problem}
+\newtcolorbox{concept}[1][]{
+    enhanced,
+    breakable,               % Allows box to split across pages
+    colback=gray!5,          % Very light gray background
+    colframe=gray!60,        % Darker gray border
+    coltitle=black,          % Title text color
+    fonttitle=\bfseries\large,
+    title={#1},              % Uses the optional argument as title
+    attach boxed title to top left={yshift=-2mm, xshift=5mm},
+    boxed title style={
+        colback=gray!15,     % Background of the title label
+        boxrule=0pt,
+        frame hidden,
+    },
+    sharp corners=south,     % Aesthetic choice: rounded top, sharp bottom
+    arc=4mm,
+    parbox=false,            % Allows normal paragraph behavior inside
+    before skip=1.5em,
+    after skip=1.5em
+}
+
+% --- Solution Environment ---
+\newenvironment{remark}
+    {\renewcommand\qedsymbol{\(\blacksquare\)}\begin{proof}[Remark]}
+    {\end{proof}}
+
