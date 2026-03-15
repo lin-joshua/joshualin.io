@@ -23,6 +23,10 @@
 \usepackage{mathtools}
 \usepackage{algorithm, algpseudocode}
 \usepackage{caption}
+\captionsetup[algorithm]{
+    labelfont=bf,
+    textfont=bf
+}
 \usepackage{float}
 \usepackage{optidef}
 
@@ -45,16 +49,6 @@
 % --- Colors & Graphics ---
 \usepackage{xcolor}
 \usepackage[most]{tcolorbox} % For the gray problem boxes
-
-% --- Header/Footer ---
-\usepackage{fancyhdr}
-\pagestyle{fancy}
-\fancyhf{}
-\fancyhead[L]{Joshua Lin}
-\fancyhead[C]{Reinforcement Learning}   % Change this per course
-\fancyhead[R]{Foundational Notes} % Change this per assignment
-\renewcommand{\headrulewidth}{0.4pt}
-\cfoot{\thepage}
 
 % --- Custom Problem Box ---
 % Usage: \begin{problem}[Optional Title] ... \end{problem}

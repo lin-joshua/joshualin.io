@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.141592653-2.6-1.40.27 (TeX Live 2025) (preloaded format=pdflatex 2025.3.8)  8 MAR 2026 11:24
+This is pdfTeX, Version 3.141592653-2.6-1.40.27 (TeX Live 2025) (preloaded format=pdflatex 2025.3.8)  15 MAR 2026 07:45
 entering extended mode
  restricted \write18 enabled.
  %&-line parsing enabled.
@@ -885,7 +885,7 @@ File: pgflibraryfadings.code.tex 2023-01-15 v3.1.10 (3.1.10)
 )))
 (/usr/local/texlive/2025/texmf-dist/tex/latex/tcolorbox/tcbposter.code.tex
 Library (tcolorbox): 'tcbposter.code.tex' version '6.4.1'
-)) (/usr/local/texlive/2025/texmf-dist/tex/latex/fancyhdr/fancyhdr.sty
+))) (/usr/local/texlive/2025/texmf-dist/tex/latex/fancyhdr/fancyhdr.sty
 Package: fancyhdr 2025/02/07 v5.2 Extensive control of page headers and footers
 
 \f@nch@headwidth=\skip67
@@ -903,33 +903,33 @@ Package: fancyhdr 2025/02/07 v5.2 Extensive control of page headers and footers
 \f@nch@widthC=\skip79
 \f@nch@widthR=\skip80
 \@temptokenb=\toks52
-))
-LaTeX Font Info:    Trying to load font information for T1+ppl on input line 4.
-
+)
+LaTeX Font Info:    Trying to load font information for T1+ppl on input line 14
+.
 
 (/usr/local/texlive/2025/texmf-dist/tex/latex/psnfss/t1ppl.fd
 File: t1ppl.fd 2001/06/04 font definitions for T1/ppl.
 ) (./main.aux)
 \openout1 = `main.aux'.
 
-LaTeX Font Info:    Checking defaults for OML/cmm/m/it on input line 4.
-LaTeX Font Info:    ... okay on input line 4.
-LaTeX Font Info:    Checking defaults for OMS/cmsy/m/n on input line 4.
-LaTeX Font Info:    ... okay on input line 4.
-LaTeX Font Info:    Checking defaults for OT1/cmr/m/n on input line 4.
-LaTeX Font Info:    ... okay on input line 4.
-LaTeX Font Info:    Checking defaults for T1/cmr/m/n on input line 4.
-LaTeX Font Info:    ... okay on input line 4.
-LaTeX Font Info:    Checking defaults for TS1/cmr/m/n on input line 4.
-LaTeX Font Info:    ... okay on input line 4.
-LaTeX Font Info:    Checking defaults for OMX/cmex/m/n on input line 4.
-LaTeX Font Info:    ... okay on input line 4.
-LaTeX Font Info:    Checking defaults for U/cmr/m/n on input line 4.
-LaTeX Font Info:    ... okay on input line 4.
-LaTeX Font Info:    Checking defaults for PD1/pdf/m/n on input line 4.
-LaTeX Font Info:    ... okay on input line 4.
-LaTeX Font Info:    Checking defaults for PU/pdf/m/n on input line 4.
-LaTeX Font Info:    ... okay on input line 4.
+LaTeX Font Info:    Checking defaults for OML/cmm/m/it on input line 14.
+LaTeX Font Info:    ... okay on input line 14.
+LaTeX Font Info:    Checking defaults for OMS/cmsy/m/n on input line 14.
+LaTeX Font Info:    ... okay on input line 14.
+LaTeX Font Info:    Checking defaults for OT1/cmr/m/n on input line 14.
+LaTeX Font Info:    ... okay on input line 14.
+LaTeX Font Info:    Checking defaults for T1/cmr/m/n on input line 14.
+LaTeX Font Info:    ... okay on input line 14.
+LaTeX Font Info:    Checking defaults for TS1/cmr/m/n on input line 14.
+LaTeX Font Info:    ... okay on input line 14.
+LaTeX Font Info:    Checking defaults for OMX/cmex/m/n on input line 14.
+LaTeX Font Info:    ... okay on input line 14.
+LaTeX Font Info:    Checking defaults for U/cmr/m/n on input line 14.
+LaTeX Font Info:    ... okay on input line 14.
+LaTeX Font Info:    Checking defaults for PD1/pdf/m/n on input line 14.
+LaTeX Font Info:    ... okay on input line 14.
+LaTeX Font Info:    Checking defaults for PU/pdf/m/n on input line 14.
+LaTeX Font Info:    ... okay on input line 14.
 
 *geometry* driver: auto-detecting
 *geometry* detected driver: pdftex
@@ -965,7 +965,7 @@ LaTeX Font Info:    ... okay on input line 4.
 * \@reversemarginfalse
 * (1in=72.27pt=25.4mm, 1cm=28.453pt)
 
-Package hyperref Info: Link coloring ON on input line 4.
+Package hyperref Info: Link coloring ON on input line 14.
 (./main.out) (./main.out)
 \@outlinefile=\write4
 \openout4 = `main.out'.
@@ -1018,79 +1018,79 @@ Package: inputenc 2024/02/08 v1.3d Input encoding file
 <cover.pdf, id=67, 597.23125pt x 845.1575pt>
 File: cover.pdf Graphic file (type pdf)
 <use cover.pdf>
-Package pdftex.def Info: cover.pdf  used on input line 6.
+Package pdftex.def Info: cover.pdf  used on input line 16.
 (pdftex.def)             Requested size: 597.22978pt x 845.15544pt.
 <cover.pdf, id=69, page=1, 597.23125pt x 845.1575pt>
 File: cover.pdf Graphic file (type pdf)
 <use cover.pdf, page 1>
-Package pdftex.def Info: cover.pdf , page1 used on input line 6.
+Package pdftex.def Info: cover.pdf , page1 used on input line 16.
 (pdftex.def)             Requested size: 597.22978pt x 845.15544pt.
 File: cover.pdf Graphic file (type pdf)
 <use cover.pdf, page 1>
-Package pdftex.def Info: cover.pdf , page1 used on input line 6.
+Package pdftex.def Info: cover.pdf , page1 used on input line 16.
 (pdftex.def)             Requested size: 561.86221pt x 795.10587pt.
 File: cover.pdf Graphic file (type pdf)
 <use cover.pdf, page 1>
-Package pdftex.def Info: cover.pdf , page1 used on input line 6.
+Package pdftex.def Info: cover.pdf , page1 used on input line 16.
 (pdftex.def)             Requested size: 561.86221pt x 795.10587pt.
 File: cover.pdf Graphic file (type pdf)
 <use cover.pdf, page 1>
-Package pdftex.def Info: cover.pdf , page1 used on input line 6.
+Package pdftex.def Info: cover.pdf , page1 used on input line 16.
 (pdftex.def)             Requested size: 561.86221pt x 795.10587pt.
 
 
 File: cover.pdf Graphic file (type pdf)
 <use cover.pdf, page 1>
-Package pdftex.def Info: cover.pdf , page1 used on input line 6.
+Package pdftex.def Info: cover.pdf , page1 used on input line 16.
 (pdftex.def)             Requested size: 561.86221pt x 795.10587pt.
 [1
 
 
  <./cover.pdf>]
-LaTeX Font Info:    Trying to load font information for OT1+ppl on input line 1
+LaTeX Font Info:    Trying to load font information for OT1+ppl on input line 2
 5.
 
 (/usr/local/texlive/2025/texmf-dist/tex/latex/psnfss/ot1ppl.fd
 File: ot1ppl.fd 2001/06/04 font definitions for OT1/ppl.
 )
 LaTeX Font Info:    Trying to load font information for OML+zplm on input line 
-15.
+25.
 
 (/usr/local/texlive/2025/texmf-dist/tex/latex/psnfss/omlzplm.fd
 File: omlzplm.fd 2002/09/08 Fontinst v1.914 font definitions for OML/zplm.
 )
 LaTeX Font Info:    Trying to load font information for OMS+zplm on input line 
-15.
+25.
 
 (/usr/local/texlive/2025/texmf-dist/tex/latex/psnfss/omszplm.fd
 File: omszplm.fd 2002/09/08 Fontinst v1.914 font definitions for OMS/zplm.
 )
 LaTeX Font Info:    Trying to load font information for OMX+zplm on input line 
-15.
+25.
 
 (/usr/local/texlive/2025/texmf-dist/tex/latex/psnfss/omxzplm.fd
 File: omxzplm.fd 2002/09/08 Fontinst v1.914 font definitions for OMX/zplm.
 )
 LaTeX Font Info:    Trying to load font information for OT1+zplm on input line 
-15.
+25.
 
 (/usr/local/texlive/2025/texmf-dist/tex/latex/psnfss/ot1zplm.fd
 File: ot1zplm.fd 2002/09/08 Fontinst v1.914 font definitions for OT1/zplm.
 )
 LaTeX Font Info:    Font shape `U/msa/m/n' will be
-(Font)              scaled to size 11.40997pt on input line 15.
+(Font)              scaled to size 11.40997pt on input line 25.
 LaTeX Font Info:    Font shape `U/msa/m/n' will be
-(Font)              scaled to size 8.33606pt on input line 15.
+(Font)              scaled to size 8.33606pt on input line 25.
 LaTeX Font Info:    Font shape `U/msa/m/n' will be
-(Font)              scaled to size 6.25204pt on input line 15.
+(Font)              scaled to size 6.25204pt on input line 25.
 LaTeX Font Info:    Font shape `U/msb/m/n' will be
-(Font)              scaled to size 11.40997pt on input line 15.
+(Font)              scaled to size 11.40997pt on input line 25.
 LaTeX Font Info:    Font shape `U/msb/m/n' will be
-(Font)              scaled to size 8.33606pt on input line 15.
+(Font)              scaled to size 8.33606pt on input line 25.
 LaTeX Font Info:    Font shape `U/msb/m/n' will be
-(Font)              scaled to size 6.25204pt on input line 15.
+(Font)              scaled to size 6.25204pt on input line 25.
 LaTeX Font Info:    Trying to load font information for U+fplmbb on input line 
-15.
+25.
 
 (/usr/local/texlive/2025/texmf-dist/tex/latex/psnfss/ufplmbb.fd
 File: ufplmbb.fd 2003/10/30 Fontinst v1.914 font definitions for U/fplmbb.
@@ -1105,12 +1105,12 @@ Package fancyhdr Warning: \headheight is too small (12.0pt):
 
 [2{/usr/local/texlive/2025/texmf-var/fonts/map/pdftex/updmap/pdftex.map}{/usr/l
 ocal/texlive/2025/texmf-dist/fonts/enc/dvips/base/8r.enc}]
-Overfull \hbox (5.85466pt too wide) in paragraph at lines 60--61
+Overfull \hbox (5.85466pt too wide) in paragraph at lines 70--71
 \T1/ppl/b/n/10.95 SARSA \T1/ppl/m/n/10.95 (State-Action-Reward-State-Action) is
  the on-policy ana-logue of TD(0) for the action-
  []
 
-LaTeX Font Info:    Trying to load font information for TS1+ppl on input line 7
+LaTeX Font Info:    Trying to load font information for TS1+ppl on input line 8
 6.
 (/usr/local/texlive/2025/texmf-dist/tex/latex/psnfss/ts1ppl.fd
 File: ts1ppl.fd 2001/06/04 font definitions for TS1/ppl.
@@ -1143,13 +1143,13 @@ Package fancyhdr Warning: \headheight is too small (12.0pt):
 
 [5]
 LaTeX Font Info:    Font shape `U/msa/m/n' will be
-(Font)              scaled to size 10.42007pt on input line 144.
+(Font)              scaled to size 10.42007pt on input line 154.
 LaTeX Font Info:    Font shape `U/msa/m/n' will be
-(Font)              scaled to size 7.91925pt on input line 144.
+(Font)              scaled to size 7.91925pt on input line 154.
 LaTeX Font Info:    Font shape `U/msb/m/n' will be
-(Font)              scaled to size 10.42007pt on input line 144.
+(Font)              scaled to size 10.42007pt on input line 154.
 LaTeX Font Info:    Font shape `U/msb/m/n' will be
-(Font)              scaled to size 7.91925pt on input line 144.
+(Font)              scaled to size 7.91925pt on input line 154.
 
 
 
@@ -1205,7 +1205,7 @@ Package fancyhdr Warning: \headheight is too small (12.0pt):
 (fancyhdr)                \addtolength{\topmargin}{-1.59999pt}.
 
 [11]
-Overfull \hbox (14.65575pt too wide) in paragraph at lines 441--442
+Overfull \hbox (14.65575pt too wide) in paragraph at lines 451--452
 []\T1/ppl/b/n/10.95 Notes. \T1/ppl/m/n/10.95 Pearl-mut-ter's trick com-putes He
 ssian-vector prod-ucts us-ing only two for-ward/back-
  []
@@ -1247,7 +1247,7 @@ Package fancyhdr Warning: \headheight is too small (12.0pt):
 (fancyhdr)                \addtolength{\topmargin}{-1.59999pt}.
 
 [15]
-Overfull \hbox (2.98877pt too wide) in paragraph at lines 590--591
+Overfull \hbox (2.98877pt too wide) in paragraph at lines 600--601
 [] \T1/ppl/m/n/10.95 Com-pute clipped sur-ro-gate: $\OMS/zplm/m/n/10.95 L[] \OT
 1/zplm/m/n/10.95 = [] [][] [](\OML/zplm/m/it/10.95 ^^Z[][]\OT1/ppl/m/n/10.95 , 
 []\OT1/zplm/m/n/10.95 (\OML/zplm/m/it/10.95 ^^Z[]\OT1/ppl/m/n/10.95 , 1[]\OML/z
@@ -1282,10 +1282,10 @@ Package rerunfilecheck Info: File `main.out' has not changed.
 (rerunfilecheck)             Checksum: C0D46C2F8506D7E972042356779061A5;870.
  ) 
 Here is how much of TeX's memory you used:
- 32365 strings out of 473190
- 641425 string characters out of 5715801
- 1059150 words of memory out of 5000000
- 55000 multiletter control sequences out of 15000+600000
+ 32367 strings out of 473190
+ 641438 string characters out of 5715801
+ 1059166 words of memory out of 5000000
+ 55002 multiletter control sequences out of 15000+600000
  606465 words of font info for 148 fonts, out of 8000000 for 9000
  1141 hyphenation exceptions out of 8191
  103i,18n,104p,593b,1320s stack positions out of 10000i,1000n,20000p,200000b,200000s
