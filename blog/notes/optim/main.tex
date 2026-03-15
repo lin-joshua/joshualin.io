@@ -2,6 +2,16 @@
 
 \include{../preamble.tex}
 
+% --- Header/Footer ---
+\usepackage{fancyhdr}
+\pagestyle{fancy}
+\fancyhf{}
+\fancyhead[L]{Joshua Lin}
+\fancyhead[C]{Optimization Theory}   % Change this per course
+\fancyhead[R]{Foundational Notes} % Change this per assignment
+\renewcommand{\headrulewidth}{0.4pt}
+\cfoot{\thepage}
+
 \begin{document}
 
 \section{Basic Notions}
@@ -83,6 +93,113 @@ TODO: Nocedal and Wright, \textit{Numerical Optimization}.
 \newpage
 \section{Optimizers for Deep Learning}
 
+\begin{concept}[Minibatch Stochastic Gradient Descent]
+    For \(f : \mathbb{R}^n \to \mathbb{R}\) differentiable, stochastic gradient descent updates \(x_{t+1} \leftarrow x_t - \alpha \widehat{\nabla} f(x_t)\) for some \(\alpha > 0\). 
+\end{concept}
+
+\begin{concept}[Momentum]
+    Momentum updates as follows, where \(y^{(k)}\) can be conceptualized as ``negative velocity'': 
+    \begin{align*}
+        y^{(k+1)} &= \beta y^{(k)} - \nabla f(y^{(k)}) \\
+        x^{(k+1)} &= x^{(k)} - \alpha y^{(k)}
+    \end{align*}
+    It is equivalent to \textit{heavy-ball momentum}, \(x^{(k+1)} = x^{(k)} - \alpha \nabla f(x^{(k)}) + \beta (x^{(k)} - x^{(k-1)})\), and reduces to gradient descent when \(\beta = 0\). Intuitively, in regions of low curvature, momentum mitigates stalled training, while in regions of high curvature, it smooths out fluctuations. 
+\end{concept}
+
+\begin{remark}
+    Algebraic equivalence to the heavy-ball form follows from taking
+    \[
+        x^{(k+1)} = x^{(k)} - \alpha y^{(k+1)}
+        \implies y^{(k+1)} = \frac{x^{(k+1)} - x^{(k)}}{-\alpha},\, y^{(k)} = \frac{x^{(k)} - x^{(k-1)}}{-\alpha}
+    \]
+    from which it follows
+    \begin{align*}
+        y^{(k+1)} = \beta y^{(k)} + \nabla f(x^{(k)})
+        &\implies \frac{x^{(k+1)} - x^{(k)}}{-\alpha} = \beta \frac{x^{(k)} - x^{(k-1)}}{-\alpha} + \nabla f(x^{(k)}) \\
+        &\implies x^{(k+1)} = x^{(k)} - \alpha \nabla f(x^{(k)}) + \beta (x^{(k)} - x^{(k-1)})
+    \end{align*}
+    which is precisely the heavy-ball update. 
+\end{remark}
+
+\begin{remark}
+    The key insights of momentum are that it increases the convergence window for the step size \(\alpha\) while speeding up convergence of ill-conditioned problems. The simplest nontrivial model is the convex quadratic, \(f(x) = \frac{1}{2}x^\top Ax - b^\top x\) for \(A \succeq 0\) real-symmetric. Let's compare gradient descent and momentum. For gradient descent, 
+    \[
+        x^{(k+1)} = x^{(k)} - \alpha \nabla f(x^{(k)}) = x^{(k)} - \alpha A (x^{(k)} - x^*)
+    \]
+    for unique minimizer \(x^* = A^{-1}b\). Let \(A = Q\Lambda Q^\top\) be the spectral decomposition with eigenvalues \(\lambda_1 \geq \cdots \geq \lambda_n > 0\). Under a change of basis \(u^{(k)} = Q^\top (x^{(k)} - x^*)\), 
+    \[
+        u^{(k+1)} = u^{(k)} - \alpha \Lambda Q^\top (x^{(k)} - x^*) = u^{(k)} - \alpha \Lambda u^{(k)}
+        \implies 
+        u^{(k)} = (I - \alpha \Lambda)^k u^{(0)}
+    \]
+    The convergence rate is therefore \(\rho = \max_i |1 - \alpha \lambda_i| = \max\{|1 - \alpha \lambda_1|, |1 - \alpha \lambda_n|\}\). Notably, convergence occurs whenever \(\rho < 1\), i.e. when \(\alpha \lambda_1 < 2\). By a perturbation argument (if the rates are not equal, you can decrease the larger one and increase the smaller one, thereby decreasing the maximum), the optimal step size \(\alpha^*\) comes from equating the two rates, 
+    \[
+        |1 - \alpha^* \lambda_1| = |1 - \alpha^* \lambda_n|
+        \implies 1 - \alpha^* \lambda_1 = -1 + \alpha^* \lambda_n 
+        \implies \alpha^* = \frac{2}{\lambda_1 + \lambda_n},\, \rho^* = \frac{\kappa-1}{\kappa+1}
+    \]
+    where \(\kappa = \lambda_1 / \lambda_n \geq 1\) is the condition number of \(A\). In comparison, consider the momentum updates under a similar change of basis \(v^{(k)} = Q^\top y^{(k)}\) and \(u^{(k)} = Q^\top (x^{(k)} - x^*)\), 
+    \begin{align*}
+        v^{(k+1)} &= \beta v^{(k)} + \Lambda u^{(k)} \\
+        u^{(k+1)} &= u^{(k)} - \alpha v^{(k+1)} = (I - \alpha \Lambda) u^{(k)} - \alpha \beta v^{(k)}
+    \end{align*}
+    This relation can be expressed as a linear recurrence, 
+    \[
+        \begin{bmatrix} 
+            v^{(k+1)} \\ 
+            u^{(k+1)} \\ 
+        \end{bmatrix}
+        = 
+        \begin{bmatrix} 
+            \beta I & \Lambda \\ 
+            -\alpha\beta I & I - \alpha \Lambda \\ 
+        \end{bmatrix}
+        \begin{bmatrix} 
+            v^{(k)} \\
+            u^{(k)} \\
+        \end{bmatrix}
+        \implies
+        \begin{bmatrix} 
+            v_i^{(k+1)} \\ 
+            u_i^{(k+1)} \\ 
+        \end{bmatrix}
+        = \underbrace{
+            \begin{bmatrix} 
+                \beta & \lambda_i \\ 
+                -\alpha\beta & 1 - \alpha \lambda_i \\ 
+            \end{bmatrix}
+        }_{R_i}
+        \begin{bmatrix} 
+            v_i^{(k)} \\
+            u_i^{(k)} \\
+        \end{bmatrix}
+        = R_i^{k+1} \begin{bmatrix}
+            v_i^{(0)} \\
+            u_i^{(0)} \\
+        \end{bmatrix}
+    \]
+    In other words, the convergence in the \(i^{\text{th}}\) eigenspace is governed by the spectral radius \(r_i\) of \(R_i\), whose characteristic polynomial and spectrum are, respectively, 
+    \begin{align*}
+        \chi_i(z) &= z^2 - (1 - \alpha \lambda_i + \beta) z + \beta \\
+        \sigma_i &= \frac{1}{2} \left(1 - \alpha \lambda_i + \beta \pm \sqrt{(1 - \alpha \lambda_i + \beta)^2 - 4\beta}\right)
+    \end{align*}
+    Consider the discriminant \(D_i = (1 - \alpha \lambda_i + \beta)^2 - 4\beta\). If \(D_i \leq 0\), then \(\sqrt{D_i}\) is purely imaginary, so the spectrum is a singleton with magnitude \(r_i = \sqrt{\beta}<1\), and convergence always occurs. On the other hand if \(D_i > 0\), the convergence criterion is \(r_i < 1\); equivalently \(\chi_i(z)\) must have roots inside the open unit disk. Checking boundary conditions \(\chi_i(\pm 1) = 0\), we find \(\alpha \lambda_i = 0\) and \(\alpha \lambda_i = 2 + 2\beta\); the former trivially requires \(\alpha > 0\), but the latter shows convergence for \(\alpha \lambda_i < 2 + 2\beta\). Comparison with the \(\alpha \lambda_i < 2\) bound for gradient descent shows that \textit{momentum nearly doubles the effective window of convergence} whenever \(\beta\) is large!
+
+    Now we seek the optimal global convergence rate \(\rho^*\), for which we must choose \(\alpha^*\) and \(\beta^*\). By a complex-valued analog to perturbation argument from gradient descent, the maximum convergence rate is minimized when 
+    \[
+        D_i \leq 0 
+        \iff -2\sqrt{\beta} \leq 1 - \alpha \lambda_i + \beta \leq 2\sqrt{\beta} 
+        \iff \lambda_i \in \left[ \frac{(1 - \sqrt{\beta})^2}{\alpha}, \frac{(1 + \sqrt{\beta})^2}{\alpha} \right]
+    \]
+    The optimum occurs when this window is just large enough, i.e. 
+    \[
+        \lambda_1 = \frac{(1 + \sqrt{\beta^*})^2}{\alpha^*},\,
+        \lambda_n = \frac{(1 - \sqrt{\beta^*})^2}{\alpha^*}
+        \implies \beta^* = \left( \frac{\sqrt{\kappa}-1}{\sqrt{\kappa}+1} \right)^2, 
+        \, \alpha^* = \left(\frac{2}{\sqrt{\lambda_1} + \sqrt{\lambda_n}}\right)^2
+    \]
+    and the global convergence rate follows from \(\rho^* = \sqrt{\beta^*}\). The insight is: \textit{for ill-conditioned problems (\(\kappa \gg 1\)), momentum effectively square-roots the condition number} compared to gradient descent.
+\end{remark}
 
 \newpage
 \part{Convex Optimization}
@@ -109,8 +226,17 @@ TODO: Nocedal and Wright, \textit{Numerical Optimization}.
         = \sum_{t=1}^T f_t(x_t) - \min_{x \in \mathcal{K}} \sum_{t=1}^T f_t(x)
         = \sum_{t=1}^T [f_t(x_t) - f_t(x^*)]
     \]
-    for \(x^* \in \argmin_{x \in \mathcal{K}} \sum_{t=1}^T f_t(x)\). 
+    for \(x^* \in \argmin_{x \in \mathcal{K}} \sum_t f_t(x)\). The goal is \textit{sublinear regret} so that average regret approaches \(0\). 
 \end{concept}
+
+\begin{remark}
+    For this framework to make sense, several assumptions must be made: 
+    \begin{itemize}
+        \item The adversary's losses must be uniformly bounded in time; otherwise, (s)he can assign an arbitrarily large loss to the decision-maker's first action (and provide zero loss to all other actions), making it impossible to bound regret from above.
+        \item Compactness, with some regularity assumptions on \(f_t\), prevents the adversary from setting aside some strategies with zero loss while increasing the decision-maker's losses indefinitely. 
+    \end{itemize}
+    Surprisingly, much can be derived with not much more than these restrictions.
+\end{remark}
 
 \section{Prediction from Expert Advice}
 
@@ -119,6 +245,7 @@ TODO: Nocedal and Wright, \textit{Numerical Optimization}.
 \end{concept}
 
 \begin{concept}[Hedge Algorithm]
+    The Hedge algorithm exponentially downweights the experts each round depending on their latest losses. 
     \begin{algorithm}[H]
         \caption*{Hedge Algorithm}
         \begin{algorithmic}[1]
