@@ -100,39 +100,39 @@ TODO: Nocedal and Wright, \textit{Numerical Optimization}.
 \end{concept}
 
 \begin{concept}[Momentum]
-    Momentum updates as follows, where \(y^{(k)}\) can be conceptualized as ``negative velocity'': 
+    Momentum updates as follows, where \(g_k\) can be conceptualized as ``negative velocity'': 
     \begin{align*}
-        y^{(k+1)} &= \beta y^{(k)} - \nabla f(y^{(k)}) \\
-        x^{(k+1)} &= x^{(k)} - \alpha y^{(k)}
+        g_{k+1} &= \beta g_k - \nabla f(w_k) \\
+        w_{k+1} &= w_k - \alpha g_k
     \end{align*}
-    It is equivalent to \textit{heavy-ball momentum}, \(x^{(k+1)} = x^{(k)} - \alpha \nabla f(x^{(k)}) + \beta (x^{(k)} - x^{(k-1)})\), and reduces to gradient descent when \(\beta = 0\). Intuitively, in regions of low curvature, momentum mitigates stalled training, while in regions of high curvature, it smooths out fluctuations. 
+    It is equivalent to \textit{heavy-ball momentum}, \(w_{k+1} = w_k - \alpha \nabla f(w_k) + \beta (w_k - w_{k-1})\), and reduces to gradient descent when \(\beta = 0\). Intuitively, in regions of low curvature, momentum mitigates stalled training, while in regions of high curvature, it smooths out fluctuations. 
 \end{concept}
 
 \begin{remark}
     Algebraic equivalence to the heavy-ball form follows from taking
     \[
-        x^{(k+1)} = x^{(k)} - \alpha y^{(k+1)}
-        \implies y^{(k+1)} = \frac{x^{(k+1)} - x^{(k)}}{-\alpha},\, y^{(k)} = \frac{x^{(k)} - x^{(k-1)}}{-\alpha}
+        w_{k+1} = w_k - \alpha g_{k+1}
+        \implies g_{k+1} = \frac{w_{k+1} - w_k}{-\alpha},\, g_k = \frac{w_k - w_{k-1}}{-\alpha}
     \]
     from which it follows
     \begin{align*}
-        y^{(k+1)} = \beta y^{(k)} + \nabla f(x^{(k)})
-        &\implies \frac{x^{(k+1)} - x^{(k)}}{-\alpha} = \beta \frac{x^{(k)} - x^{(k-1)}}{-\alpha} + \nabla f(x^{(k)}) \\
-        &\implies x^{(k+1)} = x^{(k)} - \alpha \nabla f(x^{(k)}) + \beta (x^{(k)} - x^{(k-1)})
+        g_{k+1} = \beta g_k + \nabla f(w_k)
+        &\implies \frac{w_{k+1} - w_k}{-\alpha} = \beta \frac{w_k - w_{k-1}}{-\alpha} + \nabla f(w_k) \\
+        &\implies w_{k+1} = w_k - \alpha \nabla f(w_k) + \beta (w_k - w_{k-1})
     \end{align*}
     which is precisely the heavy-ball update. 
 \end{remark}
 
 \begin{remark}
-    The key insights of momentum are that it increases the convergence window for the step size \(\alpha\) while speeding up convergence of ill-conditioned problems. The simplest nontrivial model is the convex quadratic, \(f(x) = \frac{1}{2}x^\top Ax - b^\top x\) for \(A \succeq 0\) real-symmetric. Let's compare gradient descent and momentum. For gradient descent, 
+    The key insights of momentum are that it increases the convergence window for the step size \(\alpha\) while speeding up convergence of ill-conditioned problems. The simplest nontrivial model is the convex quadratic, \(f(w) = \frac{1}{2}w^\top Aw - b^\top w\) for \(A \succeq 0\) real-symmetric. Let's compare gradient descent and momentum. For gradient descent, 
     \[
-        x^{(k+1)} = x^{(k)} - \alpha \nabla f(x^{(k)}) = x^{(k)} - \alpha A (x^{(k)} - x^*)
+        w_{k+1} = w_k - \alpha \nabla f(w_k) = w_k - \alpha A (w_k - w^*)
     \]
-    for unique minimizer \(x^* = A^{-1}b\). Let \(A = Q\Lambda Q^\top\) be the spectral decomposition with eigenvalues \(\lambda_1 \geq \cdots \geq \lambda_n > 0\). Under a change of basis \(u^{(k)} = Q^\top (x^{(k)} - x^*)\), 
+    for unique minimizer \(w^* = A^{-1}b\). Let \(A = Q\Lambda Q^\top\) be the spectral decomposition with eigenvalues \(\lambda_1 \geq \cdots \geq \lambda_n > 0\). Under a change of basis \(v_k = Q^\top (w_k - w^*)\), 
     \[
-        u^{(k+1)} = u^{(k)} - \alpha \Lambda Q^\top (x^{(k)} - x^*) = u^{(k)} - \alpha \Lambda u^{(k)}
+        v_{k+1} = v_k - \alpha \Lambda Q^\top (w_k - w^*) = v_k - \alpha \Lambda v_k
         \implies 
-        u^{(k)} = (I - \alpha \Lambda)^k u^{(0)}
+        v_k = (I - \alpha \Lambda)^k v_0
     \]
     The convergence rate is therefore \(\rho = \max_i |1 - \alpha \lambda_i| = \max\{|1 - \alpha \lambda_1|, |1 - \alpha \lambda_n|\}\). Notably, convergence occurs whenever \(\rho < 1\), i.e. when \(\alpha \lambda_1 < 2\). By a perturbation argument (if the rates are not equal, you can decrease the larger one and increase the smaller one, thereby decreasing the maximum), the optimal step size \(\alpha^*\) comes from equating the two rates, 
     \[
@@ -140,16 +140,16 @@ TODO: Nocedal and Wright, \textit{Numerical Optimization}.
         \implies 1 - \alpha^* \lambda_1 = -1 + \alpha^* \lambda_n 
         \implies \alpha^* = \frac{2}{\lambda_1 + \lambda_n},\, \rho^* = \frac{\kappa-1}{\kappa+1}
     \]
-    where \(\kappa = \lambda_1 / \lambda_n \geq 1\) is the condition number of \(A\). In comparison, consider the momentum updates under a similar change of basis \(v^{(k)} = Q^\top y^{(k)}\) and \(u^{(k)} = Q^\top (x^{(k)} - x^*)\), 
+    where \(\kappa = \lambda_1 / \lambda_n \geq 1\) is the condition number of \(A\). In comparison, consider the momentum updates under a similar change of basis \(x_k = Q^\top g_k\) and \(v_k = Q^\top (w_k - w^*)\), 
     \begin{align*}
-        v^{(k+1)} &= \beta v^{(k)} + \Lambda u^{(k)} \\
-        u^{(k+1)} &= u^{(k)} - \alpha v^{(k+1)} = (I - \alpha \Lambda) u^{(k)} - \alpha \beta v^{(k)}
+        x_{k+1} &= \beta x_k + \Lambda v_k \\
+        v_{k+1} &= v_k - \alpha x_{k+1} = (I - \alpha \Lambda) v_k - \alpha \beta x_k
     \end{align*}
     This relation can be expressed as a linear recurrence, 
     \[
         \begin{bmatrix} 
-            v^{(k+1)} \\ 
-            u^{(k+1)} \\ 
+            x_{k+1} \\ 
+            v_{k+1} \\ 
         \end{bmatrix}
         = 
         \begin{bmatrix} 
@@ -157,13 +157,13 @@ TODO: Nocedal and Wright, \textit{Numerical Optimization}.
             -\alpha\beta I & I - \alpha \Lambda \\ 
         \end{bmatrix}
         \begin{bmatrix} 
-            v^{(k)} \\
-            u^{(k)} \\
+            x_k \\
+            v_k \\
         \end{bmatrix}
         \implies
         \begin{bmatrix} 
-            v_i^{(k+1)} \\ 
-            u_i^{(k+1)} \\ 
+            x_{k+1}(i) \\ 
+            v_{k+1}(i) \\ 
         \end{bmatrix}
         = \underbrace{
             \begin{bmatrix} 
@@ -172,12 +172,12 @@ TODO: Nocedal and Wright, \textit{Numerical Optimization}.
             \end{bmatrix}
         }_{R_i}
         \begin{bmatrix} 
-            v_i^{(k)} \\
-            u_i^{(k)} \\
+            x_k(i) \\
+            v_k(i) \\
         \end{bmatrix}
         = R_i^{k+1} \begin{bmatrix}
-            v_i^{(0)} \\
-            u_i^{(0)} \\
+            x_0(i) \\
+            v_0(i) \\
         \end{bmatrix}
     \]
     In other words, the convergence in the \(i^{\text{th}}\) eigenspace is governed by the spectral radius \(r_i\) of \(R_i\), whose characteristic polynomial and spectrum are, respectively, 
