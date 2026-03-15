@@ -1,0 +1,9 @@
+\contentsline {section}{\numberline {1}Basic Notions}{2}{section.1}%
+\contentsline {part}{I\hspace {1em}Nonconvex Optimization}{3}{part.1}%
+\contentsline {section}{\numberline {2}Unconstrained Optimization}{3}{section.2}%
+\contentsline {section}{\numberline {3}Line-Search Methods}{4}{section.3}%
+\contentsline {section}{\numberline {4}Trust-Region Methods}{5}{section.4}%
+\contentsline {section}{\numberline {5}Optimizers for Deep Learning}{6}{section.5}%
+\contentsline {part}{II\hspace {1em}Convex Optimization}{8}{part.2}%
+\contentsline {part}{III\hspace {1em}Online Convex Optimization}{9}{part.3}%
+\contentsline {section}{\numberline {6}Prediction from Expert Advice}{9}{section.6}%

@@ -12,10 +12,10 @@
 \cfoot{\thepage}
 
 \begin{document}
+\tableofcontents
+\newpage
 
-\includepdf{cover.pdf}
-
-\section{Value Methods}
+\part{Value Methods}
 
 \begin{concept}[Stationary Policies]
     A \textit{Markov} policy is one which is only dependent on the current state. A \textit{stationary} policy is a Markov policy whose decisions are time-independent. 
@@ -119,7 +119,7 @@
 \end{concept}
 
 \newpage
-\section{Policy Methods}
+\part{Policy Methods}
 
 \begin{concept}[Policy Optimization]
     Model the policy using a neural network \(\pi_{\theta} : \mathcal{S} \to \mathcal{A}\). Then the problem becomes
@@ -248,7 +248,7 @@
     The likelihood ratio \(p_1(x) / p_2(x)\) is called the \textit{importance weight}. Informally, \(x \sim p_2\) ``cancels'' with \(p_2(x)\) and is replaced by \(x \sim p_1\). 
 \end{concept}
 
-\subsection{REINFORCE}
+\section{REINFORCE}
 
 \begin{concept}[REINFORCE (Williams, 1992)]
     The key idea is to estimate the policy gradient using one-sample Monte-Carlo:
@@ -280,7 +280,7 @@
     \textbf{Issues.} A bad policy (e.g. if exploration is low) leads to bad data, which leads to worse gradient estimates, creating a cycle that leads to performance collapse. REINFORCE is very unstable! 
 \end{remark}
 
-\subsection{Trust Region Algorithms}
+\section{Trust Region Algorithms}
 
 \begin{concept}[Fisher Information Matrix]
     It is the covariance matrix of the score function, or equivalently the negative expected Hessian of the log-likelihood, 
@@ -467,7 +467,7 @@
     As it turns out, proximal policy optimization will abandon the second-order Fisher information matrix computation and the hard KL constraint, addressing these issues. 
 \end{remark}
 
-\subsection{Actor-Critic Methods}
+\section{Actor-Critic Methods}
 
 \begin{concept}[Generalized Advantage Estimation (Schulman et. al., 2016)]
     GAE provides a family of advantage estimators that interpolate between bootstrapped and Monte Carlo estimates. Define the \textbf{temporal difference residual} for a value function \(V_\phi\) as 
@@ -511,7 +511,7 @@
     \textbf{Issues.} When parameters are shared between the actor and critic (e.g. in a common feature extractor), constrained policy updates like TRPO become problematic: the trust region governs the actor, but the critic's unconstrained regression updates can perturb the shared representations, violating the local geometry assumptions. PPO's clipping mechanism, as we will see, is far more amenable to shared architectures. 
 \end{remark}
 
-\subsection{Proximal Policy Optimization}
+\section{Proximal Policy Optimization}
 
 \begin{concept}[Proximal Policy Optimization (Schulman et. al., 2017)]
     PPO replaces TRPO's constrained optimization with a \textit{clipped surrogate objective} that implicitly enforces a trust region, achieving comparable or superior empirical performance at dramatically lower implementation and computational cost. Define the probability ratio 
@@ -622,4 +622,3 @@
 \end{remark}
 
 \end{document}
-

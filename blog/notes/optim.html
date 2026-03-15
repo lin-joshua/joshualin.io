@@ -1,0 +1,115 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Blog — Optimization Theory Notes</title>
+
+  <link rel="shortcut icon" href="../../assets/images/logo.ico" type="image/x-icon">
+
+  <link rel="stylesheet" href="../../assets/css/style.css">
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600&display=swap" rel="stylesheet">
+  <script>window.assetsPath = '../..';</script>
+
+  <style>
+    .pdf-wrapper {
+      position: relative;
+      width: 100%;
+      margin-top: 1em;
+    }
+
+    .pdf-controls {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      margin-bottom: 0.75em;
+    }
+
+    .pdf-embed {
+      width: 100%;
+      height: 82vh;
+      border: none;
+      border-radius: 8px;
+      display: block;
+    }
+
+    .pdf-dark {
+      filter: invert(1) hue-rotate(180deg);
+    }
+
+    .pdf-toggle-btn {
+      background: var(--bg-gradient-jet);
+      color: var(--light-gray);
+      border: 1px solid var(--jet);
+      padding: 5px 14px;
+      border-radius: 6px;
+      cursor: pointer;
+      font-size: 0.82em;
+      font-family: inherit;
+      transition: opacity 0.2s;
+    }
+
+    .pdf-toggle-btn:hover {
+      opacity: 0.75;
+    }
+  </style>
+</head>
+
+<body>
+  <main>
+    <div class="main-content">
+
+      <article class="about active" data-page="blog-post">
+        <header>
+          <h2 class="h2 article-title">Optimization Theory</h2>
+        </header>
+        <section class="about-text">
+          <p>
+            <i>Posted 2026-03-15.</i>
+          </p>
+          <p>
+            These are my foundational notes on optimization theory, written while studying optimization and learning theory.
+          </p>
+          <p>
+            <a href="./optim/main.pdf" download>Download PDF</a>
+          </p>
+
+          <div class="pdf-wrapper">
+            <div class="pdf-controls">
+              <button class="pdf-toggle-btn" id="dark-mode-btn" onclick="toggleDarkMode()">Toggle light mode</button>
+            </div>
+            <iframe
+              id="optim-pdf"
+              class="pdf-embed pdf-dark"
+              src="./optim/main.pdf"
+              title="Optimization Theory Foundational Notes"
+            ></iframe>
+          </div>
+        </section>
+      </article>
+
+    </div>
+  </main>
+
+  <script>
+    function toggleDarkMode() {
+      const pdf = document.getElementById('optim-pdf');
+      const btn = document.getElementById('dark-mode-btn');
+      const isDark = pdf.classList.toggle('pdf-dark');
+      btn.textContent = isDark ? 'Toggle light mode' : 'Toggle dark mode';
+    }
+  </script>
+
+  <script src="../../assets/js/navbar.js"></script>
+  <script src="../../assets/js/sidebar.js"></script>
+  <script src="../../assets/js/script.js"></script>
+  <script type="module" src="https://unpkg.com/ionicons@5.5.2/dist/ionicons/ionicons.esm.js"></script>
+  <script nomodule src="https://unpkg.com/ionicons@5.5.2/dist/ionicons/ionicons.js"></script>
+</body>
+
+</html>

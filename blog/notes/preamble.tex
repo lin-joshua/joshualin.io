@@ -5,13 +5,22 @@
 \usepackage{hyperref} % Allows URL insertion
 \hypersetup{
     colorlinks=true,
-    linkcolor=teal,
+    linkcolor=black,
     filecolor=magenta,      
     urlcolor=cyan,
     pdftitle={Overleaf Example},
     pdfpagemode=FullScreen,
 }
 \usepackage{pdfpages}
+\usepackage{tocloft}
+\renewcommand{\cftpartfont}{\Large\bfseries}
+\renewcommand{\cftpartpagefont}{\Large\bfseries}
+\renewcommand{\cftsecfont}{\color{gray!70!black}}
+\renewcommand{\cftsecpagefont}{\color{gray!70!black}}
+\renewcommand{\cftsubsecfont}{\color{gray!70!black}}
+\renewcommand{\cftsubsecpagefont}{\color{gray!70!black}}
+\renewcommand{\cftpartleader}{\cftdotfill{\cftdotsep}}
+\renewcommand{\cftsecleader}{\cftdotfill{\cftdotsep}}
 
 % --- Fonts ---
 \usepackage[T1]{fontenc}
@@ -77,4 +86,3 @@
 \newenvironment{remark}
     {\renewcommand\qedsymbol{\(\blacksquare\)}\begin{proof}[Remark]}
     {\end{proof}}
-
