@@ -1,6 +1,0 @@
-\contentsline {part}{I\hspace {1em}Value Methods}{2}{part.1}%
-\contentsline {part}{II\hspace {1em}Policy Methods}{6}{part.2}%
-\contentsline {section}{\numberline {1}REINFORCE}{9}{section.1}%
-\contentsline {section}{\numberline {2}Trust Region Algorithms}{9}{section.2}%
-\contentsline {section}{\numberline {3}Actor-Critic Methods}{14}{section.3}%
-\contentsline {section}{\numberline {4}Proximal Policy Optimization}{15}{section.4}%
