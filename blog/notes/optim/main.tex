@@ -16,39 +16,22 @@
 \tableofcontents
 \newpage
 
-\section{Basic Notions}
+\part{Numerical Analysis}
 
-\begin{concept}[Strong Convexity]
-    Let \(f : K \to \mathbb{R}\) differentiable for \(K \subseteq \mathbb{R}^n\). Then \(f\) is \(\alpha\)-strongly convex if it has at least some curvature everywhere: 
-    \[
-        f(y) \geq f(x) + \nabla f(x)^\top (y - x) + \frac{1}{2}\alpha \|y - x\|^2
-    \]
-    Informally, the function cannot be ``too flat'' anywhere, which is useful since small suboptimalities in output-space then automatically translate into to small suboptimalities in input-space: \(f(x) - f(x^*) \geq \alpha \|x^* - x\|^2 /2\). If \(f \in C^2\), an equivalent characterization is that the spectrum of the Hessian is bounded from below by \(\alpha\), i.e. \(\nabla^2 f(x) \geq \alpha I\). 
-\end{concept}
+\newpage
+\section{Rootfinding} 
 
-\begin{concept}[Smoothness]
-    Let \(f : K \to \mathbb{R}\) differentiable for \(K \subseteq \mathbb{R}^n\). Then \(f\) is \(\beta\)-smooth if its curvature is not too sharp anywhere: 
-    \[
-        f(y) \leq f(x) + \nabla f(x)^\top (y - x) + \frac{1}{2}\beta \|y - x\|^2
-    \]
-    Equivalently, its gradient is \(\beta\)-Lipschitz, \(\|\nabla f(y) - \nabla f(x)\| \leq \beta \|y - x\|\). Similarly, if \(f \in C^2\), another characterization is \(\nabla^2 f(x) \leq \beta I\). 
-\end{concept}
+\newpage
+\section{Factorizations}
 
-\begin{remark}
-    If \(f : K \to \mathbb{R}\) is \(\alpha\)-strongly convex \textit{and} \(\beta\)-smooth, then \(\alpha I \preceq \nabla^2 f(x) \preceq \beta I\) so we have a local characterization of the function's spectrum. In this case we denote \(\kappa = \beta / \alpha \geq 1\) the \textbf{condition number} of \(f\), analogous to the matrix condition number \(\kappa = \lambda_{\max}(A) / \lambda_{\min}(A)\) for \(A > 0\). In fact, when \(f(x) = \frac{1}{2} x^\top Ax\) for \(A > 0\), these definitions agree. 
-\end{remark}
+\newpage
+\section{Eigenvalue Computation}
 
-\begin{concept}[Euclidean Projection]
-    If \(K \subseteq \mathbb{R}^n\) is convex and closed, then it has a Euclidean projection 
-    \[
-        \Pi_K(x) = \argmin_{y \in K} \|y - x\|
-    \]
-    The generalized Pythagorean theorem states that for such a set \(K\), 
-    \[
-        \|y - x\| \geq \left|\|y - \Pi_K(x)\right\| 
-        \quad (y \in K, x \in \mathbb{R}^n)
-    \]
-\end{concept}
+\newpage 
+\section{Exploiting Sparsity} 
+
+\newpage 
+\section{Interpolation and Quadrature}
 
 \newpage
 \part{Nonconvex Optimization}
@@ -210,6 +193,39 @@ TODO: Nocedal and Wright, \textit{Numerical Optimization}.
 \newpage
 \part{Convex Optimization}
 
+\begin{concept}[Strong Convexity]
+    Let \(f : K \to \mathbb{R}\) differentiable for \(K \subseteq \mathbb{R}^n\). Then \(f\) is \(\alpha\)-strongly convex if it has at least some curvature everywhere: 
+    \[
+        f(y) \geq f(x) + \nabla f(x)^\top (y - x) + \frac{1}{2}\alpha \|y - x\|^2
+    \]
+    Informally, the function cannot be ``too flat'' anywhere, which is useful since small suboptimalities in output-space then automatically translate into to small suboptimalities in input-space: \(f(x) - f(x^*) \geq \alpha \|x^* - x\|^2 /2\). If \(f \in C^2\), an equivalent characterization is that the spectrum of the Hessian is bounded from below by \(\alpha\), i.e. \(\nabla^2 f(x) \geq \alpha I\). 
+\end{concept}
+
+\begin{concept}[Smoothness]
+    Let \(f : K \to \mathbb{R}\) differentiable for \(K \subseteq \mathbb{R}^n\). Then \(f\) is \(\beta\)-smooth if its curvature is not too sharp anywhere: 
+    \[
+        f(y) \leq f(x) + \nabla f(x)^\top (y - x) + \frac{1}{2}\beta \|y - x\|^2
+    \]
+    Equivalently, its gradient is \(\beta\)-Lipschitz, \(\|\nabla f(y) - \nabla f(x)\| \leq \beta \|y - x\|\). Similarly, if \(f \in C^2\), another characterization is \(\nabla^2 f(x) \leq \beta I\). 
+\end{concept}
+
+\begin{remark}
+    If \(f : K \to \mathbb{R}\) is \(\alpha\)-strongly convex \textit{and} \(\beta\)-smooth, then \(\alpha I \preceq \nabla^2 f(x) \preceq \beta I\) so we have a local characterization of the function's spectrum. In this case we denote \(\kappa = \beta / \alpha \geq 1\) the \textbf{condition number} of \(f\), analogous to the matrix condition number \(\kappa = \lambda_{\max}(A) / \lambda_{\min}(A)\) for \(A > 0\). In fact, when \(f(x) = \frac{1}{2} x^\top Ax\) for \(A > 0\), these definitions agree. 
+\end{remark}
+
+\begin{concept}[Euclidean Projection]
+    If \(K \subseteq \mathbb{R}^n\) is convex and closed, then it has a Euclidean projection 
+    \[
+        \Pi_K(x) = \argmin_{y \in K} \|y - x\|
+    \]
+    The generalized Pythagorean theorem states that for such a set \(K\), 
+    \[
+        \|y - x\| \geq \left|\|y - \Pi_K(x)\right\| 
+        \quad (y \in K, x \in \mathbb{R}^n)
+    \]
+\end{concept}
+
+\newpage
 \section{Linear Programming}
 
 \newpage
@@ -539,7 +555,7 @@ TODO: Nocedal and Wright, \textit{Numerical Optimization}.
     \textbf{Issues.} A bad policy (e.g. if exploration is low) leads to bad data, which leads to worse gradient estimates, creating a cycle that leads to performance collapse. REINFORCE is very unstable! 
 \end{remark}
 
-\subsection{Trust Region Algorithms}
+\subsection{Trust Region Policy Optimization}
 
 \begin{concept}[Fisher Information Matrix]
     It is the covariance matrix of the score function, or equivalently the negative expected Hessian of the log-likelihood, 
