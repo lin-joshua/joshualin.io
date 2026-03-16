@@ -95,9 +95,13 @@ TODO: Nocedal and Wright, \textit{Numerical Optimization}.
 \newpage
 \section{Optimizers for Deep Learning}
 
+\subsection{Gradient Descent}
+
 \begin{concept}[Minibatch Stochastic Gradient Descent]
     For \(f : \mathbb{R}^d \to \mathbb{R}\) differentiable, stochastic gradient descent updates \(w_k = w_{k-1} - \alpha \widehat{\nabla} f(w_k)\) for some \(\alpha > 0\). TODO. Learning rate schedulers, preconditioning, sampling with/without replacement, batch sizing, etc. 
 \end{concept}
+
+\subsection{Momentum}
 
 \begin{concept}[Momentum]
     Momentum updates as follows, where \(g_k\) can be conceptualized as ``negative velocity'': 
@@ -206,8 +210,11 @@ TODO: Nocedal and Wright, \textit{Numerical Optimization}.
 \newpage
 \part{Convex Optimization}
 
-\newpage
-\part{Online Convex Optimization}
+\section{Linear Programming}
+
+\section{Convex Programming}
+
+\section{Online Convex Optimization}
 
 \begin{concept}[The OCO Protocol]
     The following defines the OCO protocol, which can be framed as a repeated game between a \textit{decision maker} and an \textit{adversary}. Notably, the losses may be adversarially selected for each round after knowing the decision maker's action.
@@ -240,7 +247,7 @@ TODO: Nocedal and Wright, \textit{Numerical Optimization}.
     Surprisingly, much can be derived with not much more than these restrictions.
 \end{remark}
 
-\section{Prediction from Expert Advice}
+\subsection{Prediction from Expert Advice}
 
 \begin{concept}[The Experts Setting]
     In this special case of OCO, \(\mathcal{K} = \Delta_n\) is the probability simplex over \(n\) experts, each of whom presents a recommendation at time \(t\) represented by a basis vector \(e_i \in \Delta_n\). Therefore the experts' loss vector is \(l_t = (f_t(e_i))_{i=1}^n \in \mathbb{R}^n\).
@@ -870,5 +877,9 @@ TODO: Nocedal and Wright, \textit{Numerical Optimization}.
     \]
     where \(\beta > 0\) is an adaptive penalty coefficient. When the KL divergence exceeds \(1.5\delta\), \(\beta\) is doubled; when it falls below \(\delta / 1.5\), \(\beta\) is halved. While this variant is closer to TRPO in spirit (directly penalizing distributional shift), PPO-Clip generally outperforms it empirically, suggesting that the pessimistic clipping mechanism is a more robust proxy for trust region enforcement than a tuned penalty.
 \end{remark}
+
+\subsection{Group-Relative Policy Optimization}
+
+TODO. 
 
 \end{document}
