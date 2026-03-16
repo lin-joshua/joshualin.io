@@ -212,8 +212,10 @@ TODO: Nocedal and Wright, \textit{Numerical Optimization}.
 
 \section{Linear Programming}
 
+\newpage
 \section{Convex Programming}
 
+\newpage
 \section{Online Convex Optimization}
 
 \begin{concept}[The OCO Protocol]
@@ -235,7 +237,7 @@ TODO: Nocedal and Wright, \textit{Numerical Optimization}.
         = \sum_{t=1}^T f_t(x_t) - \min_{x \in \mathcal{K}} \sum_{t=1}^T f_t(x)
         = \sum_{t=1}^T [f_t(x_t) - f_t(x^*)]
     \]
-    for \(x^* \in \argmin_{x \in \mathcal{K}} \sum_t f_t(x)\). The goal is \textit{sublinear regret} so that average regret approaches \(0\). 
+    for \(x^* \in \argmin_{x \in \mathcal{K}} \sum_t f_t(x)\). The goal is \textit{sublinear regret} so that the average regret vanishes asymptotically, i.e. \(\frac{1}{T} \operatorname{Regret}_T(\mathcal{A}) \to 0\) as \(T \to \infty\).
 \end{concept}
 
 \begin{remark}
