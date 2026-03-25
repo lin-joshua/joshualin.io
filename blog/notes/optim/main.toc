@@ -1,26 +1,58 @@
-\contentsline {part}{I\hspace {1em}Numerical Analysis}{2}{part.1}%
-\contentsline {section}{\numberline {1}Rootfinding}{3}{section.1}%
-\contentsline {section}{\numberline {2}Factorizations}{4}{section.2}%
-\contentsline {section}{\numberline {3}Eigenvalue Computation}{5}{section.3}%
-\contentsline {section}{\numberline {4}Exploiting Sparsity}{6}{section.4}%
-\contentsline {section}{\numberline {5}Interpolation and Quadrature}{7}{section.5}%
-\contentsline {part}{II\hspace {1em}Nonconvex Optimization}{8}{part.2}%
-\contentsline {section}{\numberline {6}Unconstrained Optimization}{8}{section.6}%
-\contentsline {section}{\numberline {7}Line-Search Methods}{9}{section.7}%
-\contentsline {section}{\numberline {8}Trust-Region Methods}{10}{section.8}%
-\contentsline {section}{\numberline {9}Optimizers for Deep Learning}{11}{section.9}%
-\contentsline {subsection}{\numberline {9.1}Gradient Descent}{11}{subsection.9.1}%
-\contentsline {subsection}{\numberline {9.2}Momentum}{11}{subsection.9.2}%
-\contentsline {part}{III\hspace {1em}Convex Optimization}{13}{part.3}%
-\contentsline {section}{\numberline {10}Linear Programming}{14}{section.10}%
-\contentsline {section}{\numberline {11}Convex Programming}{15}{section.11}%
-\contentsline {section}{\numberline {12}Online Convex Optimization}{16}{section.12}%
-\contentsline {subsection}{\numberline {12.1}Prediction from Expert Advice}{16}{subsection.12.1}%
-\contentsline {part}{IV\hspace {1em}Reinforcement Learning}{18}{part.4}%
-\contentsline {section}{\numberline {13}Value Methods}{18}{section.13}%
-\contentsline {section}{\numberline {14}Policy Methods}{22}{section.14}%
-\contentsline {subsection}{\numberline {14.1}REINFORCE}{24}{subsection.14.1}%
-\contentsline {subsection}{\numberline {14.2}Trust Region Policy Optimization}{25}{subsection.14.2}%
-\contentsline {subsection}{\numberline {14.3}Actor-Critic Methods}{29}{subsection.14.3}%
-\contentsline {subsection}{\numberline {14.4}Proximal Policy Optimization}{30}{subsection.14.4}%
-\contentsline {subsection}{\numberline {14.5}Group-Relative Policy Optimization}{33}{subsection.14.5}%
+\contentsline {part}{I\hspace {1em}Numerical Analysis}{3}{part.1}%
+\contentsline {section}{\numberline {1}Rootfinding}{4}{section.1}%
+\contentsline {section}{\numberline {2}Factorizations}{5}{section.2}%
+\contentsline {section}{\numberline {3}Eigenvalue Computation}{6}{section.3}%
+\contentsline {section}{\numberline {4}Exploiting Sparsity}{7}{section.4}%
+\contentsline {section}{\numberline {5}Interpolation and Quadrature}{8}{section.5}%
+\contentsline {part}{II\hspace {1em}Nonconvex Optimization}{9}{part.2}%
+\contentsline {section}{\numberline {6}Unconstrained Optimization}{9}{section.6}%
+\contentsline {section}{\numberline {7}Line-Search Methods}{10}{section.7}%
+\contentsline {section}{\numberline {8}Trust-Region Methods}{11}{section.8}%
+\contentsline {section}{\numberline {9}Optimizers for Deep Learning}{12}{section.9}%
+\contentsline {subsection}{\numberline {9.1}Gradient Descent}{12}{subsection.9.1}%
+\contentsline {subsection}{\numberline {9.2}Momentum}{12}{subsection.9.2}%
+\contentsline {part}{III\hspace {1em}Convex Optimization}{14}{part.3}%
+\contentsline {section}{\numberline {10}Linear Programming}{15}{section.10}%
+\contentsline {section}{\numberline {11}Convex Programming}{16}{section.11}%
+\contentsline {section}{\numberline {12}Semidefinite Optimization}{17}{section.12}%
+\contentsline {section}{\numberline {13}Online Convex Optimization}{18}{section.13}%
+\contentsline {subsection}{\numberline {13.1}Prediction from Expert Advice}{18}{subsection.13.1}%
+\contentsline {section}{\numberline {14}Dynamical Systems}{19}{section.14}%
+\contentsline {part}{IV\hspace {1em}Reinforcement Learning}{20}{part.4}%
+\contentsline {section}{\numberline {15}Optimal Control}{20}{section.15}%
+\contentsline {subsection}{\numberline {15.1}Bellman Equations}{20}{subsection.15.1}%
+\contentsline {section}{\numberline {16}Value Learning}{21}{section.16}%
+\contentsline {subsection}{\numberline {16.1}TD-Learning}{21}{subsection.16.1}%
+\contentsline {subsection}{\numberline {16.2}SARSA and Q-Learning}{21}{subsection.16.2}%
+\contentsline {section}{\numberline {17}Policy Optimization}{24}{section.17}%
+\contentsline {subsection}{\numberline {17.1}REINFORCE}{26}{subsection.17.1}%
+\contentsline {subsection}{\numberline {17.2}Natural Policy Gradients}{27}{subsection.17.2}%
+\contentsline {subsection}{\numberline {17.3}Conservative Policy Iteration}{29}{subsection.17.3}%
+\contentsline {subsection}{\numberline {17.4}Trust-Region Policy Optimization}{30}{subsection.17.4}%
+\contentsline {subsection}{\numberline {17.5}Proximal Policy Optimization}{32}{subsection.17.5}%
+\contentsline {subsection}{\numberline {17.6}Group-Relative Policy Optimization}{34}{subsection.17.6}%
+\contentsline {section}{\numberline {18}Actor-Critic Methods}{35}{section.18}%
+\contentsline {subsection}{\numberline {18.1}Determinstic Policy Gradients}{35}{subsection.18.1}%
+\contentsline {subsection}{\numberline {18.2}Soft Actor-Critic}{37}{subsection.18.2}%
+\contentsline {section}{\numberline {19}Goal-Conditioning}{38}{section.19}%
+\contentsline {subsection}{\numberline {19.1}Universal Value Function Approximators}{38}{subsection.19.1}%
+\contentsline {subsection}{\numberline {19.2}Hindsight Experience Replay}{38}{subsection.19.2}%
+\contentsline {subsection}{\numberline {19.3}Contrastive Reinforcement Learning}{39}{subsection.19.3}%
+\contentsline {section}{\numberline {20}Unsupervised Skill Discovery}{40}{section.20}%
+\contentsline {subsection}{\numberline {20.1}Noise-Contrastive Estimation}{40}{subsection.20.1}%
+\contentsline {subsection}{\numberline {20.2}Contrastive Predictive Coding}{40}{subsection.20.2}%
+\contentsline {section}{\numberline {21}Contrastive Reinforcement Learning}{42}{section.21}%
+\contentsline {subsection}{\numberline {21.1}Contrastive Learning}{42}{subsection.21.1}%
+\contentsline {subsection}{\numberline {21.2}CURL: Contrastive Representation Learning for RL}{43}{subsection.21.2}%
+\contentsline {subsection}{\numberline {21.3}Mutual Information as an Intrinsic Reward}{43}{subsection.21.3}%
+\contentsline {subsection}{\numberline {21.4}Diversity is All You Need (DIAYN)}{44}{subsection.21.4}%
+\contentsline {subsection}{\numberline {21.5}Mutual Information Skill Learning (MISL)}{45}{subsection.21.5}%
+\contentsline {subsection}{\numberline {21.6}Contrastive Intrinsic Control (CIC)}{46}{subsection.21.6}%
+\contentsline {subsection}{\numberline {21.7}Contrastive RL as Goal-Conditioned RL}{47}{subsection.21.7}%
+\contentsline {subsection}{\numberline {21.8}Goal-Conditioned Reinforcement Learning}{49}{subsection.21.8}%
+\contentsline {subsubsection}{\numberline {21.8.1}The Sparse Reward Problem and Hindsight Experience Replay}{50}{subsubsection.21.8.1}%
+\contentsline {subsubsection}{\numberline {21.8.2}Goal Representations}{52}{subsubsection.21.8.2}%
+\contentsline {subsubsection}{\numberline {21.8.3}Sub-Goal Generation and Curriculum Learning}{53}{subsubsection.21.8.3}%
+\contentsline {subsubsection}{\numberline {21.8.4}Synthesis: GCRL as a Unifying Lens}{54}{subsubsection.21.8.4}%
+\contentsline {subsection}{\numberline {21.9}Contrastive Representations for Temporal Reasoning}{54}{subsection.21.9}%
+\contentsline {subsection}{\numberline {21.10}Summary and Connections}{55}{subsection.21.10}%

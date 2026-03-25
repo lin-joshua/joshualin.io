@@ -1,8 +1,7 @@
-% --- Geometry & Layout ---
 \usepackage[margin=1in]{geometry}
-\usepackage{parskip}  % Adds spacing between paragraphs automatically
-\usepackage{enumitem} % Adds extra formatting options for itemized lists
-\usepackage{hyperref} % Allows URL insertion
+\usepackage{parskip}
+\usepackage{enumitem}
+\usepackage{hyperref}
 \hypersetup{
     colorlinks=true,
     linkcolor=black,
@@ -22,12 +21,19 @@
 \renewcommand{\cftpartleader}{\cftdotfill{\cftdotsep}}
 \renewcommand{\cftsecleader}{\cftdotfill{\cftdotsep}}
 
-% --- Fonts ---
-\usepackage[T1]{fontenc}
-\usepackage{tgpagella}       % TeX Gyre Pagella (Text)
-\usepackage{mathpazo}        % Palatino math font to match Pagella
+\newcommand{\algline}{%
+  \par\noindent
+  \hrule height 0.5pt
+  \kern 1.5pt
+  \hrule height 0.5pt
+  \kern 2pt
+}
+\newcommand{\st}{\;\middle|\;}
 
-% --- Math & Symbols ---
+\usepackage[T1]{fontenc}
+\usepackage{tgpagella}
+\usepackage{mathpazo}
+
 \usepackage{amsmath, amssymb, amsthm}
 \usepackage{mathtools}
 \usepackage{algorithm, algpseudocode}
@@ -39,7 +45,6 @@
 \usepackage{float}
 \usepackage{optidef}
 
-% --- Custom Operators ---
 \DeclareMathOperator*{\argmax}{argmax}
 \DeclareMathOperator*{\argmin}{argmin}
 \DeclareMathOperator*{\maximize}{maximize}
@@ -55,34 +60,30 @@
 \let\succeq\succcurlyeq
 \let\preceq\preccurlyeq
 
-% --- Colors & Graphics ---
 \usepackage{xcolor}
-\usepackage[most]{tcolorbox} % For the gray problem boxes
+\usepackage[most]{tcolorbox}
 
-% --- Custom Problem Box ---
-% Usage: \begin{problem}[Optional Title] ... \end{problem}
 \newtcolorbox{concept}[1][]{
     enhanced,
-    breakable,               % Allows box to split across pages
-    colback=gray!5,          % Very light gray background
-    colframe=gray!60,        % Darker gray border
-    coltitle=black,          % Title text color
+    breakable,
+    colback=gray!5,
+    colframe=gray!60,
+    coltitle=black,
     fonttitle=\bfseries\large,
-    title={#1},              % Uses the optional argument as title
+    title={#1},
     attach boxed title to top left={yshift=-2mm, xshift=5mm},
     boxed title style={
-        colback=gray!15,     % Background of the title label
+        colback=gray!15,
         boxrule=0pt,
         frame hidden,
     },
-    sharp corners=south,     % Aesthetic choice: rounded top, sharp bottom
+    sharp corners=south,
     arc=4mm,
-    parbox=false,            % Allows normal paragraph behavior inside
+    parbox=false,
     before skip=1.5em,
     after skip=1.5em
 }
 
-% --- Solution Environment ---
 \newenvironment{remark}
     {\renewcommand\qedsymbol{\(\blacksquare\)}\begin{proof}[Remark]}
     {\end{proof}}

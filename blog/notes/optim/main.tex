@@ -2,13 +2,12 @@
 
 \input{../preamble.tex}
 
-% --- Header/Footer ---
 \usepackage{fancyhdr}
 \pagestyle{fancy}
 \fancyhf{}
 \fancyhead[L]{Joshua Lin}
-\fancyhead[C]{Optimization Theory}   % Change this per course
-\fancyhead[R]{Foundational Notes} % Change this per assignment
+\fancyhead[C]{Optimization Theory}
+\fancyhead[R]{Foundational Notes}
 \renewcommand{\headrulewidth}{0.4pt}
 \cfoot{\thepage}
 
@@ -232,21 +231,24 @@ TODO: Nocedal and Wright, \textit{Numerical Optimization}.
 \section{Convex Programming}
 
 \newpage
+\section{Semidefinite Optimization}
+
+\newpage
 \section{Online Convex Optimization}
 
 \begin{concept}[The OCO Protocol]
     The following defines the OCO protocol, which can be framed as a repeated game between a \textit{decision maker} and an \textit{adversary}. Notably, the losses may be adversarially selected for each round after knowing the decision maker's action.
-    \begin{algorithm}[H]
-        \caption*{Online Convex Optimization Protocol}
-        \begin{algorithmic}[1]
-            \State Fix \(\mathcal{K}\) convex and compact.
-            \For{\(t = 1, \dots, T\)}
-                \State Decision maker selects action \(x_t \in \mathcal{K}\) according to algorithm \(\mathcal{A}\).
-                \State Adversary reveals loss function \(f_t : \mathcal{K} \to \mathbb{R}\).
-                \State Decision maker incurs loss \(f_t(x_t)\).
-            \EndFor
-        \end{algorithmic}
-    \end{algorithm}
+    \algline
+    \textbf{Online Convex Optimization Protocol}
+    \begin{algorithmic}[1]
+        \State Fix \(\mathcal{K}\) convex and compact.
+        \For{\(t = 1, \dots, T\)}
+            \State Decision maker selects action \(x_t \in \mathcal{K}\) according to algorithm \(\mathcal{A}\).
+            \State Adversary reveals loss function \(f_t : \mathcal{K} \to \mathbb{R}\).
+            \State Decision maker incurs loss \(f_t(x_t)\).
+        \EndFor
+    \end{algorithmic}
+    \algline
     Because the losses are adversarial, there is no meaningful way to absolutely bound the cumulative loss of the decision maker. Instead, the relevant metric of performance is the performance against the best fixed action in hindsight, i.e. the \textit{regret} function
     \[
         \operatorname{Regret}_T(\mathcal{A}) 
@@ -273,24 +275,28 @@ TODO: Nocedal and Wright, \textit{Numerical Optimization}.
 
 \begin{concept}[Hedge Algorithm]
     The Hedge algorithm exponentially downweights the experts each round depending on their latest losses. 
-    \begin{algorithm}[H]
-        \caption*{Hedge Algorithm}
-        \begin{algorithmic}[1]
-            \State Initialize \(W_1 = \mathbf{1}_n\).
-            \For{\(t=1, \dots, T\)}
-            \State Initialize distribution \(x_t = \left[\frac{W_t(i)}{\sum_j W_t(j)}\right]_{i=1}^n\).
-                \State Decision maker selects expert \(i_t \sim x_t\).
-                \State Adversary reveals loss function \(f_t\), and DM incurs loss \(l_t(i_t)\). 
-                \State Update weights \(W_{t+1}(i) = W_t(i) \exp(-\eta l_t(i))\). 
-            \EndFor
-        \end{algorithmic}
-    \end{algorithm}
+    \algline
+    \textbf{Hedge Algorithm}
+    \begin{algorithmic}[1]
+        \State Initialize \(W_1 = \mathbf{1}_n\).
+        \For{\(t=1, \dots, T\)}
+        \State Initialize distribution \(x_t = \left[\frac{W_t(i)}{\sum_j W_t(j)}\right]_{i=1}^n\).
+            \State Decision maker selects expert \(i_t \sim x_t\).
+            \State Adversary reveals loss function \(f_t\), and DM incurs loss \(l_t(i_t)\). 
+            \State Update weights \(W_{t+1}(i) = W_t(i) \exp(-\eta l_t(i))\). 
+        \EndFor
+    \end{algorithmic}
+    \algline
 \end{concept}
+
+\section{Dynamical Systems}
 
 \newpage
 \part{Reinforcement Learning}
 
-\section{Value Methods}
+\section{Optimal Control}
+
+\subsection{Bellman Equations}
 
 \begin{concept}[Stationary Policies]
     A \textit{Markov} policy is one which is only dependent on the current state. A \textit{stationary} policy is a Markov policy whose decisions are time-independent. 
@@ -309,37 +315,43 @@ TODO: Nocedal and Wright, \textit{Numerical Optimization}.
     \end{align*}
 \end{concept}
 
-\begin{remark}
-    There is an operator-theoretic representation: view \(V^\pi \in \mathbb{R}^S\) and \(Q^\pi \in \mathbb{R}^{SA}\), and define \(\mathbb{P} \in \mathbb{R}^{SA \times S}\) to be the transition dynamics \(\mathbb{P}_{(s,a), s'} = \mathbb{P}(s' \mid s, a)\). Let \(\Pi_\pi \in \mathbb{R}^{S \times SA}\) be the policy matrix with \((\Pi_\pi)_{s,(s',a)} = \mathbf{1}[s = s'] \pi(a \mid s)\), and let \(r \in \mathbb{R}^{SA}\) be the reward vector. Then the Bellman consistency equations become
-    \[
-        Q^\pi = r + \gamma \mathbb{P} \Pi_\pi Q^\pi, \qquad V^\pi = \Pi_\pi Q^\pi
-    \]
-    Define the \textit{Bellman evaluation operator} \(\mathcal{T}^\pi : \mathbb{R}^{SA} \to \mathbb{R}^{SA}\) by \(\mathcal{T}^\pi Q = r + \gamma \mathbb{P} \Pi_\pi Q\). Then \(Q^\pi\) is the unique fixed point of \(\mathcal{T}^\pi\), and since \(\mathcal{T}^\pi\) is a \(\gamma\)-contraction in \(\|\cdot\|_\infty\), the solution is
-    \[
-        Q^\pi = (I - \gamma \mathbb{P}\Pi_\pi)^{-1} r
-    \]
-    Similarly, the \textit{Bellman optimality operator} \(\mathcal{T}^* Q = r + \gamma \mathbb{P} \max_\pi \Pi_\pi Q\) has unique fixed point \(Q^*\), and the optimal policy is \(\pi^*(s) = \argmax_a Q^*(s,a)\). Value iteration is precisely the repeated application \(Q_{k+1} = \mathcal{T}^* Q_k\), which converges at rate \(\gamma^k\).
-\end{remark}
+\newpage
+\section{Value Learning}
+
+\subsection{TD-Learning}
+
+\begin{concept}[State-Value Iteration]
+    Consider an agent which acts according to policy \(\pi\). The goal of value learning is to predict the expected (discounted) future rewards for any current state of the agent. 
+\end{concept}
 
 \begin{concept}[Temporal Difference Learning]
-    TD learning updates the value function using \textit{bootstrapped} estimates rather than waiting for complete trajectory returns. The \textbf{TD(0)} update rule is
-    \[
-        V(s_t) \leftarrow V(s_t) + \alpha \underbrace{\left(r(s_t, a_t) + \gamma V(s_{t+1}) - V(s_t)\right)}_{\delta_t \text{ (TD error)}}
-    \]
-    More generally, \textbf{TD(\(\lambda\))} interpolates between TD(0) and Monte Carlo via eligibility traces. Define the \(n\)-step return
-    \[
-        G_t^{(n)} = \sum_{k=0}^{n-1} \gamma^k r_{t+k} + \gamma^n V(s_{t+n})
-    \]
-    Then the \(\lambda\)-return is an exponentially-weighted average of all \(n\)-step returns,
-    \[
-        G_t^\lambda = (1 - \lambda) \sum_{n=1}^{T-t} \lambda^{n-1} G_t^{(n)}
-    \]
-    TD(0) is biased but low-variance (it bootstraps from \(V\), which may be inaccurate), while Monte Carlo (\(\lambda = 1\)) is unbiased but high-variance. TD methods are \textit{off-policy compatible} and converge under standard stochastic approximation conditions (Robbins-Monro). With function approximation \(V_\phi\), the update becomes semi-gradient:
-    \[
-        \phi \leftarrow \phi + \alpha \delta_t \nabla_\phi V_\phi(s_t)
-    \]
-    where crucially the gradient is \textit{not} taken through the bootstrap target \(V_\phi(s_{t+1})\).
+    The Bellman operator specifies \((\mathcal{B}V)(s) = \mathbb{E}_{a \sim \pi(\cdot \mid s)}[r(s, a) + \gamma \mathbb{E}_{s' \sim \mathbb{P}(\cdot \mid s, a)}[V(s')]]\). TD(\(\lambda\)) attempts to iteratively apply the Bellman operator using, effectively, the next \(1 / \lambda\) states. It tries to solve the \textit{credit assignment} problem by sizing the TD-update using an \textit{eligibility trace function}, which tracks the most recently used states at each time step. 
+
+    The eligibility trace can either be \textit{accumulated}, which is closer to the idea that frequent visitation should increase responsibility (but can increase instability), or \textit{reset}, which is more conservative and may under-credit in some settings (but avoids trace explosion). 
+    \algline
+    \textbf{TD(\(\lambda\)) Algorithm}
+    \begin{algorithmic}[1]
+    \State Initialize step size \(\alpha\), discount \(\gamma\), trace parameter \(\lambda\). 
+    \State Initialize \(V(s) = e(s) = 0\) for all states \(s \in \mathcal{S}\). 
+    \For{\(episode= 1, 2, \dots\)}
+        \State Reset \(e(s) = 0\) for all \(s \in \mathcal{S}\). 
+        \For{\(t=0,1,\dots,T\)}
+            \State Sample \(a_t \sim \pi(\cdot \mid s_t)\); observe \(r(s_t, a_t)\) and \(s_{t+1}\). 
+            \State Compute TD error \(\delta \gets r(s_t, a_t) + \gamma V(s_{t+1}) - V(s_t)\). 
+            \State Decay the traces \(e(s) \gets \gamma \lambda e(s)\) for all \(s \in \mathcal{S}\). 
+            \State \textbf{Accumulate} \(e(s_t) \gets e(s_t) + 1\), or \textbf{replace} \(e(s_t) \gets 1\). 
+            \State Update \(V(s) \gets V(s) + \alpha \delta e(s)\) for all \(s \in \mathcal{S}\). 
+        \EndFor
+    \EndFor
+    \end{algorithmic}
+    \algline
 \end{concept}
+
+\begin{remark}
+    There is a smooth interpolation between \(\lambda=0\), which corresponds to high bias and low variance, and \(\lambda=1\) (Monte Carlo) for low bias but high variance. For TD(\(0\)), accumulating and resetting the eligibility trace agree. 
+\end{remark}
+
+\subsection{SARSA and Q-Learning}
 
 \begin{concept}[SARSA and Expected SARSA]
     \textbf{SARSA} (State-Action-Reward-State-Action) is the on-policy analogue of TD(0) for the action-value function. At each step, the agent observes \((s_t, a_t, r_t, s_{t+1}, a_{t+1})\) and updates
@@ -394,7 +406,7 @@ TODO: Nocedal and Wright, \textit{Numerical Optimization}.
 \end{concept}
 
 \newpage
-\section{Policy Methods}
+\section{Policy Optimization}
 
 \begin{concept}[Policy Optimization]
     Model the policy using a neural network \(\pi_{\theta} : \mathcal{S} \to \mathcal{A}\). Then the problem becomes
@@ -527,22 +539,22 @@ TODO: Nocedal and Wright, \textit{Numerical Optimization}.
 
 \begin{concept}[REINFORCE (Williams, 1992)]
     The key idea is to estimate the policy gradient using one-sample Monte-Carlo:
-    \begin{algorithm}[H]
-    \caption*{REINFORCE Algorithm}
+    \algline
+    \textbf{REINFORCE Algorithm}
     \begin{algorithmic}[1]
     \State Initialize learning rate \(\alpha\)
     \State Initialize weights \(\theta\) of a policy network \(\pi_\theta\)
-    \For{\(episode = 0, \dots, \text{MAX\_EPISODE}\)}
+    \For{\(episode = 1, 2, \dots\)}
         \State Sample a trajectory \(\tau = (s_0, a_0, r_0, \dots, s_T, a_T, r_T) \sim \pi_\theta\)
-        \State Set \(\nabla_\theta J(\theta) \leftarrow 0\)
-        \For{\(t = 0, \dots, T\)}
-            \State \(R_t(\tau) \leftarrow \sum_{t'=t}^T \gamma^{t'-t} r_{t'}\)
-            \State \(\nabla_\theta J(\theta) \leftarrow \nabla_\theta J(\theta) + R_t(\tau) \nabla_\theta \log \pi_\theta(a_t \mid s_t)\)
+        \State Set \(\nabla_\theta J(\theta) \gets 0\)
+        \For{\(t = 0, 1, \dots, T\)}
+            \State \(R_t(\tau) \gets \sum_{t'=t}^T \gamma^{t'-t} r_{t'}\)
+            \State \(\nabla_\theta J(\theta) \gets \nabla_\theta J(\theta) + R_t(\tau) \nabla_\theta \log \pi_\theta(a_t \mid s_t)\)
         \EndFor
         \State \(\theta \leftarrow \theta + \alpha \nabla_\theta J(\theta)\)
     \EndFor
     \end{algorithmic}
-    \end{algorithm}
+    \algline
 \end{concept}
 
 \begin{remark}
@@ -555,16 +567,16 @@ TODO: Nocedal and Wright, \textit{Numerical Optimization}.
     \textbf{Issues.} A bad policy (e.g. if exploration is low) leads to bad data, which leads to worse gradient estimates, creating a cycle that leads to performance collapse. REINFORCE is very unstable! 
 \end{remark}
 
-\subsection{Trust Region Policy Optimization}
+\subsection{Natural Policy Gradients}
 
 \begin{concept}[Fisher Information Matrix]
     It is the covariance matrix of the score function, or equivalently the negative expected Hessian of the log-likelihood, 
     \begin{align*}
-        \mathcal{I}(\pi_\theta) 
+        F(\pi_\theta) 
         &= \mathbb{E}_{s \sim d^{\pi_\theta},\, a \sim \pi_\theta(\cdot \mid s)} \left[\nabla_\theta \log \pi_\theta(a \mid s) \nabla_\theta \log \pi_\theta(a \mid s)^\top \right] \\
         &= \mathbb{E}_{s \sim d^{\pi_\theta},\, a \sim \pi_\theta(\cdot \mid s)} \left[-\nabla_\theta^2 \log \pi_\theta(a \mid s)\right]
     \end{align*}
-    where the second equality is known as the \textbf{Fisher information identity}. \(\mathcal{I}(\pi_\theta)\) is also the Hessian of the expected conditional KL divergence \(\mathcal{I}(\pi_\theta) = \nabla_{\theta'}^2 \TKL{\pi_\theta}{\pi_{\theta'}} \rvert_{\theta' = \theta}\), where
+    where the second equality is known as the \textbf{Fisher information identity}. \(F(\pi_\theta)\) is also the Hessian of the expected conditional KL divergence \(F(\pi_\theta) = \nabla_{\theta'}^2 \TKL{\pi_\theta}{\pi_{\theta'}} \rvert_{\theta' = \theta}\), where
     \begin{align*}
         \TKL{\pi_\theta}{\pi_{\theta'}} 
         &= \mathbb{E}_{s \sim d^{\pi_\theta}}[\KL{\pi_\theta(\cdot \mid s)}{\pi_{\theta'}(\cdot \mid s)} ] \\
@@ -573,19 +585,19 @@ TODO: Nocedal and Wright, \textit{Numerical Optimization}.
     Since the score has zero expectation, it locally defines the geometry of the \textit{statistical manifold}: 
     \[
         \TKL{\pi_\theta}{\pi_{\theta + \Delta\theta}} 
-        \approx \underbrace{\TKL{\pi_\theta}{\pi_{\theta}}}_{=0} + \frac{1}{2}\Delta\theta^\top \mathcal{I}(\pi_\theta) \Delta\theta
-        = \frac{1}{2}\Delta\theta^\top \mathcal{I}(\pi_\theta) \Delta\theta
+        \approx \underbrace{\TKL{\pi_\theta}{\pi_{\theta}}}_{=0} + \frac{1}{2}\Delta\theta^\top F(\pi_\theta) \Delta\theta
+        = \frac{1}{2}\Delta\theta^\top F(\pi_\theta) \Delta\theta
     \]
-    (A statistical manifold is a family of distributions \(\mathcal{M} = \{p(x; \theta) : \theta \in \Theta \}\) for \textit{parameter space} \(\Theta \subseteq \mathbb{R}^n\), with local coordinates \(\theta^i\) and \textit{Fisher-Rao metric} \(g_{ij}(\theta) = \mathcal{I}(\pi_\theta)_{ij}\)). 
+    (A statistical manifold is a family of distributions \(\mathcal{M} = \{p(x; \theta) : \theta \in \Theta \}\) for \textit{parameter space} \(\Theta \subseteq \mathbb{R}^n\), with local coordinates \(\theta^i\) and \textit{Fisher-Rao metric} \(g_{ij}(\theta) = F(\pi_\theta)_{ij}\)). 
 \end{concept}
 
 \begin{remark}
-    In this context, we care about the Fisher information identity primarily since it allows us to connect \(\mathcal{I}(\pi_\theta)\) to the KL divergence. Indeed, 
+    In this context, we care about the Fisher information identity primarily since it allows us to connect \(F(\pi_\theta)\) to the KL divergence. Indeed, 
     \begin{align*}
         \nabla_{\theta'}^2 \TKL{\pi_\theta}{\pi_\theta'} \rvert_{\theta' = \theta}
         &= \nabla_{\theta'}^2 \mathbb{E}_{s \sim d^{\pi_\theta},\, a \sim \pi_\theta(\cdot \mid s)}[\log \pi_\theta(a \mid s) - \log \pi_{\theta'}(a \mid s)] \\
         &= \mathbb{E}_{s \sim d^{\pi_\theta},\, a \sim \pi_\theta(\cdot \mid s)}[-\nabla_{\theta'}^2 \log \pi_{\theta'}(a \mid s)]
-        = \mathcal{I}(\pi_\theta)
+        = F(\pi_\theta)
     \end{align*}
     So, why is the identity true? Intuitively, for some parametrized distribution \(p(x; \theta)\), the Hessian \(-\nabla_\theta^2 \log p(x; \theta)\) measures how sensitive the log-likelihood is to \(\theta\): if it is large (e.g. in operator norm), then the model will sharply degrade under perturbation of \(\theta\). On the other hand, \(\nabla_\theta \log p(x; \theta) \nabla_\theta p(x; \theta)^\top\) measures the variance of the gradient of log-likelihood. 
 
@@ -616,11 +628,11 @@ TODO: Nocedal and Wright, \textit{Numerical Optimization}.
     \end{maxi*}
     The optimal step can be found by a Taylor approximation of the KL divergence (using the Fisher information matrix) and enforcing the KKT conditions; its direction is
     \[
-        \widetilde{\nabla}_\theta J(\theta) = \mathcal{I}(\pi_\theta)^{-1} \nabla_\theta J(\theta)
+        \widetilde{\nabla}_\theta J(\theta) = F(\pi_\theta)^{-1} \nabla_\theta J(\theta)
     \]
     with optimal step size 
     \[
-        \alpha = \sqrt{\frac{2\delta}{\nabla_\theta J(\theta)^\top \mathcal{I}(\pi_\theta)^{-1} \nabla_\theta J(\theta)}}
+        \alpha = \sqrt{\frac{2\delta}{\nabla_\theta J(\theta)^\top F(\pi_\theta)^{-1} \nabla_\theta J(\theta)}}
     \]
     The natural policy gradient update is \(\theta \leftarrow \theta + \alpha \widetilde{\nabla}_\theta J(\theta)\). 
 \end{concept}
@@ -640,6 +652,8 @@ TODO: Nocedal and Wright, \textit{Numerical Optimization}.
 
     Natural policy gradients are limited in practice since inversion of the Fisher information matrix at each iteration is extremely costly at \(\mathcal{O}(|\theta|^3)\), especially for neural networks with millions or billions of parameters; additionally, it may be that some steps blow up the KL divergence if the Taylor approximation is not good (e.g., if the Hessian is not positive-definite). However, the ideas form the basis of TRPO, which itself is the foundation of modern policy optimization. 
 \end{remark}
+
+\subsection{Conservative Policy Iteration}
 
 \begin{concept}[The Performance Difference Identity]
     The \textit{performance difference} between two policies \(\pi_\theta\) and \(\pi_{\theta'}\) is
@@ -692,6 +706,8 @@ TODO: Nocedal and Wright, \textit{Numerical Optimization}.
     \textbf{Issues.} The two largest problems are that monotonic improvement is only guaranteed for mixture policies (which deep neural networks violate) and that the constant \(c_2\) is extraordinarily large, thus requiring a massive surrogate objective to guarantee positive improvement. 
 \end{remark}
 
+\subsection{Trust-Region Policy Optimization}
+
 \begin{concept}[Trust Region Policy Optimization (Schulman et. al., 2015)]
     TRPO provides a \textit{theory of monotonic improvement for general policy update rules}. It frames the problem as a contrained optimization, building on the ideas of CPI and NPG: 
     \begin{maxi*}
@@ -707,12 +723,12 @@ TODO: Nocedal and Wright, \textit{Numerical Optimization}.
         {(\underbrace{\nabla_{\theta'} L_{\pi_\theta}(\pi_{\theta'}) \rvert_{\theta' = \theta}}_{g_\theta})^\top \Delta \theta}
         {}
         {}
-        \addConstraint{\frac{1}{2}\Delta\theta^\top \mathcal{I}(\pi_\theta)\Delta\theta}{\leq \delta}
+        \addConstraint{\frac{1}{2}\Delta\theta^\top F(\pi_\theta)\Delta\theta}{\leq \delta}
     \end{maxi*}
-    The ideal direction is \(s_\theta = \mathcal{I}(\pi_\theta)^{-1}g_\theta\) which is computed by the conjugate-gradient method (requiring only \(\mathcal{O}(|\theta|)\) per matvec thanks to \textbf{Pearlmutter's trick}!). The step size is computed by backtracking line search, starting from the natural policy gradient step size (the optimal size assuming the conjugate-gradient solution and first-order approximation are exact): 
+    The ideal direction is \(s_\theta = F(\pi_\theta)^{-1}g_\theta\) which is computed by the conjugate-gradient method (requiring only \(\mathcal{O}(|\theta|)\) per matvec thanks to \textbf{Pearlmutter's trick}!). The step size is computed by backtracking line search, starting from the natural policy gradient step size (the optimal size assuming the conjugate-gradient solution and first-order approximation are exact): 
     \[
         \theta' 
-        = \theta + \alpha^j \sqrt{\frac{2\delta}{{s_\theta}^\top \mathcal{I}(\pi_\theta)s_\theta}} s_\theta
+        = \theta + \alpha^j \sqrt{\frac{2\delta}{{s_\theta}^\top F(\pi_\theta)s_\theta}} s_\theta
         = \theta + \alpha^j \sqrt{\frac{2\delta}{{g_\theta}^\top s_\theta}} s_\theta
     \]
     where \(j \in \{0, \dots, J\}\) is the smallest positive integer such that both the \textit{performance difference is positive} and the \textit{KL divergence constraint is satisfied}. If no such \(j \leq J\) exists, then the policy remains constant while more data is collected at the next iteration. (For the analysis, take \(J=\infty\)). TRPO guarantees that 
@@ -742,51 +758,16 @@ TODO: Nocedal and Wright, \textit{Numerical Optimization}.
     As it turns out, proximal policy optimization will abandon the second-order Fisher information matrix computation and the hard KL constraint, addressing these issues. 
 \end{remark}
 
-\subsection{Actor-Critic Methods}
+\newpage
+\subsection{Proximal Policy Optimization}
 
 \begin{concept}[Generalized Advantage Estimation (Schulman et. al., 2016)]
-    GAE provides a family of advantage estimators that interpolate between bootstrapped and Monte Carlo estimates. Define the \textbf{temporal difference residual} for a value function \(V_\phi\) as 
-    \[
-        \delta_t = r(s_t, a_t) + \gamma V_\phi(s_{t+1}) - V_\phi(s_t)
-    \]
-    Notably, \(\delta_t\) is an unbiased one-step estimate of the advantage: 
-    \[
-        \mathbb{E}_{\tau \sim \pi_\theta}\left[\delta_t \mid s_t, a_t\right] = A^{\pi_\theta}(s_t, a_t)
-    \]
-    The \textit{generalized advantage estimate} is an exponentially-weighted average of multi-step advantage estimates: 
+    GAE provides a family of advantage estimators that interpolate between bootstrapped and Monte Carlo estimates. Recall the TD error \(\delta_t = r(s_t, a_t) + \gamma V_\phi(s_{t+1}) - V_\phi(s_t)\). Note \(\delta_t\) is an unbiased one-step estimate of the advantage, \(\mathbb{E}_{\tau \sim \pi_\theta}\left[\delta_t \mid s_t, a_t\right] = A^{\pi_\theta}(s_t, a_t)\). The \textit{generalized advantage estimate} is an exponentially-weighted average of multi-step advantage estimates: 
     \[
         \widehat{\mathbb{A}}_t = \sum_{t'=t}^{T} (\gamma\lambda)^{t'-t} \delta_{t'} \quad (\lambda \in [0,1])
     \]
-    where \(\lambda\) is the \textit{bias-variance tradeoff parameter}, and conventionally \(0^0 = 1\). Notably, if \(\lambda=0\), then \(\widehat{\mathbb{A}} = \delta_t\), the one-step TD residual; if \(\lambda = 1\), then \(\widehat{\mathbb{A}}_t = R_t(\tau) - V(s_t)\), the Monte Carlo advantage. While GAE is mostly an empirical method, one theoretical guarantee is that if \(\|V_\phi - V^{\pi_\theta}\|_\infty \leq \varepsilon\), then the bias is bounded by an expression that vanishes as \(\lambda \to 1\): 
-    \[
-        \left| \mathbb{E}_{\tau \sim \pi_\theta}[\widehat{\mathbb{A}}_t - A^{\pi_\theta}(s_t, a_t)] \right| \leq \frac{2\varepsilon\gamma(1 - \lambda)}{1 - \gamma\lambda}
-    \]
+    where \(\lambda\) is the \textit{bias-variance tradeoff parameter}, and conventionally \(0^0 = 1\). Notably, if \(\lambda=0\), then \(\widehat{\mathbb{A}} = \delta_t\), and if \(\lambda = 1\), then \(\widehat{\mathbb{A}}_t = R_t(\tau) - V(s_t)\), the Monte Carlo advantage.
 \end{concept}
-
-\begin{concept}[Actor-Critic]
-    An actor-critic architecture maintains two components: 
-    \begin{itemize}
-        \item \textbf{Actor} \(\pi_\theta\): the policy network, updated by policy gradient methods. 
-        \item \textbf{Critic} \(V_\phi\): a value function approximator with parameters \(\phi\), trained by regression on observed returns. 
-    \end{itemize}
-    The critic provides advantage estimates (e.g., via GAE) that are used in place of Monte Carlo returns in the policy gradient, 
-    \[
-        \nabla_\theta J(\theta) \approx \mathbb{E}_{\tau \sim \pi_\theta} \left[ \sum_{t=0}^T \gamma^t \widehat{\mathbb{A}}_t \nabla_\theta \log \pi_\theta(a_t \mid s_t) \right]
-    \]
-    The critic is updated by minimizing the squared error loss 
-    \[
-        \mathcal{L}(V_\phi) = \mathbb{E}_{\tau \sim \pi_\theta}\left[\sum_{t=0}^T (V_\phi(s_t) - R_t(\tau))^2\right]
-    \]
-    Unlike REINFORCE, the actor-critic framework allows for lower-variance gradient estimates at the cost of bias introduced by the learned value function. 
-\end{concept}
-
-\begin{remark}
-    \textbf{Notes.} The baseline subtraction used in REINFORCE can be viewed as a special case: using \(b(s) = V^{\pi_\theta}(s)\) gives the advantage \(A^{\pi_\theta}(s,a) = Q^{\pi_\theta}(s,a) - V^{\pi_\theta}(s)\), which is exactly what the critic estimates. The key distinction is that in actor-critic, the critic is actively learned and used for bootstrapping (via TD residuals), not just as a passive baseline. 
-    
-    \textbf{Issues.} When parameters are shared between the actor and critic (e.g. in a common feature extractor), constrained policy updates like TRPO become problematic: the trust region governs the actor, but the critic's unconstrained regression updates can perturb the shared representations, violating the local geometry assumptions. PPO's clipping mechanism, as we will see, is far more amenable to shared architectures. 
-\end{remark}
-
-\subsection{Proximal Policy Optimization}
 
 \begin{concept}[Proximal Policy Optimization (Schulman et. al., 2017)]
     PPO replaces TRPO's constrained optimization with a \textit{clipped surrogate objective} that implicitly enforces a trust region, achieving comparable or superior empirical performance at dramatically lower implementation and computational cost. Define the probability ratio 
@@ -860,12 +841,12 @@ TODO: Nocedal and Wright, \textit{Numerical Optimization}.
 
 \begin{concept}[PPO-Clip Algorithm]
     The full algorithm operates as follows: 
-    \begin{algorithm}[H]
-    \caption*{PPO-Clip Algorithm}
+    \algline
+    \textbf{PPO-Clip Algorithm}
     \begin{algorithmic}[1]
     \State Initialize policy parameters \(\theta\), value function parameters \(\phi\)
     \State Initialize hyperparameters: learning rate \(\alpha\), clip range \(\varepsilon\), GAE parameter \(\lambda\), number of epochs \(K\), minibatch size \(M\)
-    \For{\(iteration = 0, \dots, \text{MAX\_ITER}\)}
+    \For{\(iteration = 1, 2, \dots\)}
         \State Collect a batch of trajectories \(\mathcal{D} = \{\tau_i\}\) using \(\pi_\theta\) 
         \State Compute GAE advantages \(\widehat{\mathbb{A}}_t\) for all \((s_t, a_t) \in \mathcal{D}\) using \(V_\phi\)
         \State Normalize advantages: \(\widehat{\mathbb{A}}_t \leftarrow (\widehat{\mathbb{A}}_t - \mu_{\widehat{\mathbb{A}}}) / \sigma_{\widehat{\mathbb{A}}}\) over the batch
@@ -881,7 +862,7 @@ TODO: Nocedal and Wright, \textit{Numerical Optimization}.
         \State \(\theta \leftarrow \theta'\)
     \EndFor
     \end{algorithmic}
-    \end{algorithm}
+    \algline
 \end{concept}
 
 \begin{remark}
@@ -900,4 +881,615 @@ TODO: Nocedal and Wright, \textit{Numerical Optimization}.
 
 TODO. 
 
+\newpage
+\section{Actor-Critic Methods}
+
+\begin{concept}[Actor-Critic]
+    Roughly speaking, actor-critic methods bring together the main families thus far: Q-learning and policy optimization. An actor-critic architecture maintains two components: 
+    \begin{itemize}
+        \item \textbf{Actor} \(\pi_\theta\): the policy network, updated by policy gradient methods. 
+        \item \textbf{Critic} \(V_\phi\): a value function approximator with parameters \(\phi\), trained by regression on observed returns. 
+    \end{itemize}
+    The critic provides advantage estimates (e.g., via GAE) that are used in place of Monte Carlo returns in the policy gradient, 
+    \[
+        \nabla_\theta J(\theta) \approx \mathbb{E}_{\tau \sim \pi_\theta} \left[ \sum_{t=0}^T \gamma^t \widehat{\mathbb{A}}_t \nabla_\theta \log \pi_\theta(a_t \mid s_t) \right]
+    \]
+    The critic is updated by minimizing the squared error loss 
+    \[
+        \mathcal{L}(V_\phi) = \mathbb{E}_{\tau \sim \pi_\theta}\left[\sum_{t=0}^T (V_\phi(s_t) - R_t(\tau))^2\right]
+    \]
+\end{concept}
+
+\begin{remark}
+    \textbf{Notes.} The baseline subtraction used in REINFORCE can be viewed as a special case: using \(b(s) = V^{\pi_\theta}(s)\) gives the advantage \(A^{\pi_\theta}(s,a) = Q^{\pi_\theta}(s,a) - V^{\pi_\theta}(s)\), which is exactly what the critic estimates. The key distinction is that in actor-critic, the critic is actively learned and used for bootstrapping (via TD residuals), not just as a passive baseline. 
+    
+    \textbf{Issues.} When parameters are shared between the actor and critic (e.g. in a common feature extractor), constrained policy updates like TRPO become problematic: the trust region governs the actor, but the critic's unconstrained regression updates can perturb the shared representations, violating the local geometry assumptions. PPO's clipping mechanism, as we will see, is far more amenable to shared architectures. 
+\end{remark}
+
+\subsection{Determinstic Policy Gradients} 
+
+\begin{concept}[Determinstic Policy Gradient Theorem]
+    In continuous control, it's often desirable for the actor to output a fixed action \(\mu_\theta(s)\), not a distribution \(\pi_\theta(\cdot \mid s)\). Why? 
+    \begin{itemize}
+        \item \textit{Variance reduction:} the stochastic gradient \(\mathbb{E}_{s \sim d^{\pi_\theta}, \, a \sim \pi_\theta(\cdot \mid s)}[\nabla_\theta \log \pi_\theta(a \mid s) Q(s, a)]\) depends on sampling actions \(a\), which can be very noisy. 
+        \item \textit{High-dimensional complexity:} if actions are high-dimensional, the stochastic policy has to model a distribution whose complexity can scale with dimension, while the deterministic one needs to only output a single action. 
+    \end{itemize}
+\end{concept}
+
+\begin{concept}[Deep Deterministic Policy Gradients (Lillicrap et al., 2015)]
+    DDPG generalizes Q-learning to continuous state and action spaces.
+    \algline
+    \textbf{DDPG Algorithm}
+    \begin{algorithmic}[1]
+        \State Initialize networks \(\mu, \mu^-, Q, Q^-\), replay buffer \(\mathcal{D} \gets \varnothing\). 
+        \For{\(episode=1,2,\dots\)}
+            \State Initialize stochastic noise process \(Z_t\). 
+            \State Choose action \(a_t \gets \mu(s_t) + Z_t\), observe \(r_t, s_{t+1}\). 
+            \State Update replay buffer \(\mathcal{D} \gets \mathcal{D} \cup (s_t, a_t, r_t, s_{t+1})\). 
+            \State Sample minibatch uniformly \(\{(s_i, a_i, r_i, s_i')\}_{i=1}^N \subseteq \mathcal{D}\). 
+            \State Define the TD targets \(y_i \gets r_i + \gamma Q^-(s_i', \mu^-(s_i'))\). 
+            \State Minimize the critic loss \(\mathcal{L}(\theta^Q) = \operatorname{MSE}(\{Q(s_i, a_i), y_i\}_{i=1}^N)\). 
+            \State Maximize the actor objective \(J(\theta^\mu) = \frac{1}{N} \sum_{i=1}^N Q(s_i, \mu(s_i))\). 
+            \State Perform Polyak update \(\theta^{\mu^-} \gets \tau \theta^{\mu} + (1 - \tau) \theta^{\mu^-}\). 
+            \State Perform Polyak update \(\theta^{Q^-} \gets \tau \theta^{Q} + (1 - \tau) \theta^{Q^-}\). 
+        \EndFor
+    \end{algorithmic}
+    \algline
+    The replay buffer is generally fixed size (and kicks out the oldest transition once full), and the noise process is generally Gaussian or Ornstein-Uhlenbeck. For stability, the target networks are slowly updated with \(\tau \in [10^{-3}, 10^{-2}]\). 
+\end{concept}
+
+\begin{remark}
+    DDPG has three main issues:
+    \begin{itemize}
+        \item \textit{Overestimation Bias:} suppose \(Q^-(s,a) = Q_{\text{true}}^-(s,a) + \delta Q(s,a)\) for some error function \(\delta Q\). Then the actor will systematically learn to exploit actions with high noise. 
+        \item \textit{Instability:} DDPG combines bootstrapping, neural function approximation, and off-policy replay. All are hard on their own, and together they result in extreme brittleness. 
+        \item \textit{Shifting Targets:} if the critic network updates too quickly, learning can become unstable, since the actor is always trying to match a moving target. This may lead to performance collapse, as in REINFORCE, due to a loop of bad exploration and bad actions. 
+    \end{itemize}
+    As we'll see, TD3 addresses each of these issues. 
+\end{remark}
+
+\begin{concept}[Twin Delayed DDPG (Fujimoto et al., 2018)]
+    TD3 presents three main changes to DDPG: 
+    \begin{itemize}
+        \item \textit{Twin critics} \(Q_1\) and \(Q_2\); the actor is optimized conservatively against the \(\min\) of their estimates. Due to different initializations, they in general will not agree. 
+        \item \textit{Delayed actor updates} every \(d\) steps (usually \(d=2\)) allow the critic to ``settle'' before the actor optimizes against it. 
+        \item \textit{Target policy smoothing} introduces clipped noise to the target policy, forcing the actor to only learn actions \textit{robust} to the noise. More precisely, the update becomes
+            \begin{align*}
+                a_i' &= \mu^-(s_i') + \operatorname{clip}(\varepsilon_i, -c, c) \quad (\varepsilon_i \sim \mathcal{N}(0, \sigma)) \\
+                y_i &= r_i + \gamma Q^-(s_i', a_i') 
+            \end{align*}
+    \end{itemize}
+\end{concept}
+
+\subsection{Soft Actor-Critic}
+
+\begin{concept}[Maximum Entropy RL]
+    MaxEnt reinforcement learning is a framework which rewards entropy at each time step: 
+    \[
+        J(\theta) = \mathbb{E}_{\tau \sim \pi_\theta} \left[ \sum_{t=0}^\infty \gamma^t (r(s_t, a_t) + \alpha \mathcal{H}(\pi_\theta(\cdot \mid s_t))) \right]
+    \]
+    Note that this framework is distinct from entropy as a loss regularizer (e.g. PPO), which is more to keep the policy diffuse, avoid premature collapse, and encourage exploration. In particular, MaxEnt encourages the agent to \textit{plan ahead} to reach states with high entropy. 
+\end{concept}
+
+\begin{concept}[Soft-Actor Critic (Haarnoja et al., 2018)]
+    It is an off-policy actor-critic algorithm within the MaxEnt framework, TODO. 
+\end{concept}
+
+\newpage
+\section{Goal-Conditioning}
+
+\subsection{Universal Value Function Approximators}
+
+\begin{concept}[Universal Value Function Approximators (Schaul et al. 2015)] 
+    Given a goal space \(\mathcal{G}\), define a a pseudo-reward function \(r(s, a, g)\). Define general value functions that represent the expected pseudo-return: 
+    \begin{align*}
+        V^{\pi_\theta}(s, g) &= \mathbb{E}_{\tau \sim \pi_\theta} \left[ \sum_{t=0}^\infty \gamma^t r(s_t, a_t, g) \st s_0 = s \right] : \mathcal{S} \times \mathcal{G} \to \mathbb{R} \\
+        Q^{\pi_\theta}(s, a, g) &= \mathbb{E}_{\tau \sim \pi_\theta} \left[ \sum_{t=0}^\infty \gamma^t r(s_t, a_t, g) \st s_0 = s, a_0 = a \right] : \mathcal{S} \times \mathcal{A} \times \mathcal{G} \to \mathbb{R}
+    \end{align*}
+    The Bellman equations are also satisfied: 
+    \begin{align*}
+        V^{\pi_\theta}(s, g) &= \mathbb{E}_{a \sim \pi_\theta(\cdot \mid s)}[Q^{\pi_\theta}(s, a, g)] \\
+        Q^{\pi_\theta}(s, a, g) &= r(s, a, g) + \gamma \mathbb{E}_{s' \sim \mathbb{P}(\cdot \mid s, a)}[V^{\pi_\theta}(s', g)]
+    \end{align*}
+\end{concept}
+
+\begin{remark}
+    The motivating question: in what theoretical framework can an agent learn how to value states for many different goals at once? For example, maybe a Minecraft agent has several goals: 1) make bacon, 2) kill a zombie, 3) trade with a villager. It is inefficient to treat these as three distinct reward functions, since the there is shared environmental knowledge which helps with each goal. The key contribution of UVFA is to develop a framework in which these goals are therefore treated as inputs to the same learned value function. 
+\end{remark}
+
+\subsection{Hindsight Experience Replay} 
+
+\begin{concept}[Hindsight Experience Replay (Andrychowicz et al., 2017)]
+    The idea of HER is that for sparse reward functions in the goal-conditioned setting, we can add \textit{pseudo-goals} to our replay buffer so that the agent learns about environment dynamics even without a reward. Formally, we assume 
+    \begin{itemize}
+        \item To each goal \(g\) corresponds a \textit{success function} \(f_g : \mathcal{S} \to \{0, 1\}\); that is, \(f_g(s) = 1\) if and only if state \(s\) successfully achieves goal \(g\). 
+        \item Given any \(s\), there exists \(m(s) \in \mathcal{G}\) such that \(f_{m(s)}(s) = 1\) (so \(m : \mathcal{S} \to \mathcal{G}\)). (We want to be able to introduce pseudo-goals no matter which state we're in.)
+    \end{itemize}
+    HER is a drop-in modification to off-policy algorithms which already have a replay buffer. In the following, \(\cdot\|\cdot\) denotes concatenation. 
+    \algline
+    \textbf{Hindsight Experience Replay}
+    \begin{algorithmic}[1]
+        \State Initialize replay buffer \(\mathcal{D} \gets \varnothing\). 
+        \For{\(episode=1,2,\dots\)}
+            \State Sample \(g\) from goal distribution, \(\tau\) from the off-policy algorithm. 
+            \For{\(t=0,1,\dots\)}
+                \State Store \(\mathcal{D} \gets \mathcal{D} \cup (s_t \| g, a_t, r_t, s_{t+1}\|g)\). 
+                \State Store \(\mathcal{D} \gets \mathcal{D} \cup (s_t \| g', a_t, r_t, s_{t+1}\|g')\) for each pseudo-goal \(g'\). 
+            \EndFor
+            \State Perform optimizer updates according to the off-policy algorithm. 
+        \EndFor
+    \end{algorithmic}
+    \algline
+\end{concept}
+
+\begin{remark}
+    How do we select good pseudo-goals \(g'\)? The simplest method is to choose only \(m(s_T)\), the goal associated with our terminal state. However, experiments show it can be better to choose \(k\approx 4-8\) pseudo-goals uniformly from the \textit{future} of that episode. In practical implementations, whenever an experience is selected from the replay buffer, it has probability \(p_{\text{HER}} = 1 - \frac{1}{k+1} = \frac{k}{k+1}\) of being swapped out for a (future) transition. In this sense, the hyperparameter \(k\) controls the ratio of pseudo to real goals in the buffer.
+\end{remark}
+
+\begin{remark}
+    Example: consider a locomotion task over \(\mathcal{S} = \mathcal{G} = \mathbb{R}\) with a deterministic goal distribution; that is, we always ``sample'' \(g = g_0 \in \mathbb{R}\) in Line 3 of the Hindsight Experience Replay algorithm. The success functions then are \(f_g(s) = \mathbb{I}_{\{g\}}(s)\). 
+\end{remark}
+
+\subsection{Contrastive Reinforcement Learning}
+
+\begin{concept}[Contrastive Learning as Goal-Conditioned RL (Eysenbach et al., 2022)]
+\end{concept}
+
+\newpage
+\section{Unsupervised Skill Discovery}
+
+\subsection{Noise-Contrastive Estimation}
+
+The methods in the previous sections (DIAYN, MISL, CIC) all rest on a mutual information objective whose key computational challenge is estimating the partition function of a density model. Noise-Contrastive Estimation (NCE) provides a principled way to sidestep this by converting density estimation into binary classification.
+
+\begin{concept}[Noise-Contrastive Estimation (Gutmann \& Hyv\"arinen, 2010)]
+    Let \(p_\theta\) be an unnormalized model with intractable partition function \(Z(\theta)\). Given a \textit{noise distribution} \(q\), NCE draws \(k\) noise samples per real datum and trains a binary classifier to distinguish real data from noise. The optimal log-odds ratio of the classifier is
+    \[
+        \log \frac{P(\text{real} \mid x)}{P(\text{noise} \mid x)} = \log p_\theta(x) - \log q(x) - \log k
+    \]
+    so a well-trained classifier implicitly recovers \(\log p_\theta\) without ever evaluating \(Z(\theta)\). The training objective is binary cross-entropy over real/noise pairs:
+    \[
+        \mathcal{L}_{\text{NCE}}(\theta) = \mathbb{E}_{x \sim p_{\text{data}}}[\log \sigma(f_\theta(x))] + k \cdot \mathbb{E}_{x \sim q}[\log(1 - \sigma(f_\theta(x)))]
+    \]
+    where \(f_\theta(x) = \log p_\theta(x) - \log q(x) - \log k\) and \(\sigma\) is the sigmoid. The partition function is either absorbed as a learned scalar bias or held fixed.
+\end{concept}
+
+\begin{remark}
+    \textbf{Why classification instead of likelihood?} The partition function \(Z(\theta) = \int p_\theta(x)\,dx\) requires a sum or integral over all of input space---intractable for large vocabularies or continuous domains. NCE replaces this global normalization with a local, sample-based comparison: at each step, the model only needs to score \(k+1\) candidates, not the entire space.
+
+    \textbf{Connection to negative sampling.} Word2Vec's skip-gram negative sampling is a special case of NCE with a unigram noise distribution. Each positive (context, word) pair is contrasted against \(k\) randomly drawn words; the shared weights learn to embed words such that co-occurring pairs score high.
+
+    \textbf{Effect of \(k\).} Larger \(k\) provides a better approximation to true MLE but at greater computational cost. With \(k = 1\), NCE reduces to a balanced binary classifier, and with \(k \to \infty\), the bias toward \(p_{\text{data}}\) dominates and the estimator approaches maximum likelihood.
+\end{remark}
+
+\subsection{Contrastive Predictive Coding}
+
+NCE converts density estimation into binary classification. Contrastive Predictive Coding (CPC) extends this idea in a new direction: rather than fitting a density model, it trains a representation by asking whether a context vector can \textit{predict} future observations---without modeling their full distribution.
+
+\begin{concept}[CPC (van den Oord et al., 2018)]
+    Given a sequential input \(x_1, x_2, \dots\), CPC learns:
+    \begin{itemize}
+        \item A \textit{local encoder} \(g_{\text{enc}}\) mapping each \(x_t\) to a latent \(z_t = g_{\text{enc}}(x_t)\).
+        \item An \textit{autoregressive model} \(g_{\text{ar}}\) (e.g., a GRU) summarizing \(z_1, \dots, z_t\) into a context \(c_t\).
+    \end{itemize}
+    For each prediction horizon \(k\), a linear head \(W_k\) predicts the future representation via \(\hat{z}_{t+k} = W_k c_t\). The model is trained with the \textbf{InfoNCE} loss: given one positive \(z_{t+k}\) and \(N\) negatives \(\{z_j\}_{j=1}^N\) drawn from other sequences,
+    \[
+        \mathcal{L}_{\text{InfoNCE}} = -\mathbb{E}\left[\log \frac{\exp(z_{t+k}^\top W_k c_t)}{\exp(z_{t+k}^\top W_k c_t) + \sum_{j=1}^N \exp(z_j^\top W_k c_t)}\right]
+    \]
+    This is a softmax cross-entropy over an \((N+1)\)-way identification problem: which of the \(N+1\) candidates is the true future? After training, the encoder \(g_{\text{enc}}\) and context model \(g_{\text{ar}}\) are transferred to downstream tasks; the prediction heads \(W_k\) are discarded.
+\end{concept}
+
+\begin{remark}
+    \textbf{InfoNCE as a mutual information lower bound.} The InfoNCE loss is a lower bound on the mutual information between the future \(z_{t+k}\) and the context \(c_t\):
+    \[
+        I(z_{t+k};\, c_t) \geq \log(N+1) - \mathcal{L}_{\text{InfoNCE}}
+    \]
+    Minimizing the loss therefore \textit{maximizes a lower bound on \(I(z_{t+k}; c_t)\)}, forcing the context to retain exactly the information about the past that is predictive of the future---and discard the rest (unpredictable noise, irrelevant details).
+
+    \textbf{What is learned.} The encoder is not trained to reconstruct \(x_t\) (a generative objective) but to produce representations such that future states can be \textit{identified} from the current context. This naturally induces a bottleneck: representations that are too noisy cannot support identification, while representations that are too compressed cannot distinguish positives from hard negatives.
+
+    \textbf{Connection to NCE.} InfoNCE is a multi-class generalization of NCE: binary NCE (one negative) becomes an \((N+1)\)-way classification problem with \(N\) negatives. As \(N \to \infty\), the lower bound on \(I(z_{t+k}; c_t)\) tightens and the objective approaches the true mutual information.
+
+    \textbf{Connection to RL.} The CPC framework is formally close to the intrinsic objectives of DIAYN and CIC: in all three cases, a representation is trained so that pairing a context (skill \(z\) or past context \(c_t\)) with a state enables identification in a contrastive pool. CPC makes the temporal structure explicit---the ``skill'' is the past, and the ``state'' is the future.
+\end{remark}
+
+\newpage
+\section{Contrastive Reinforcement Learning}
+ 
+The policy gradient and value-based methods developed so far all share a common assumption: the reward function \(r(s, a)\) is given to the agent, and the task is to maximize the expected discounted sum of rewards. In many practical settings, however, reward functions are either absent, expensive to specify, or so sparse that the agent cannot learn from them effectively. This motivates a family of approaches that attempt to learn \textit{representations} or \textit{intrinsic objectives} that are useful for downstream tasks---without relying on dense, hand-specified rewards.
+ 
+Contrastive reinforcement learning sits at the intersection of two ideas that we now develop from scratch: \textit{contrastive representation learning}, which extracts structure from observations by comparing them, and \textit{mutual information as an intrinsic reward}, which gives the agent an objective even when the environment provides no signal. After building these foundations, we will see that they are not merely loosely related heuristics---they are, under certain conditions, formally equivalent to learning optimal value functions.
+ 
+\subsection{Contrastive Learning}
+ 
+\begin{concept}[Contrastive Learning]
+    Consider observation space \(\mathcal{X}\). Given \textit{anchor} \(x \in \mathcal{X}\), \textit{positive} \(x^+ \in \mathcal{X}\) (semantically similar to \(x\)), and \(K\) \textit{negatives} \(\{x^-_k\}_{k=1}^K\) (semantically dissimilar), a contrastive loss trains an encoder \(f_\theta : \mathcal{X} \to \mathbb{R}^d\) so that \(f_\theta(x)\) is close to \(f_\theta(x^+)\) and far from each \(f_\theta(x^-_k)\).
+ 
+    The canonical instance is the \textbf{InfoNCE loss} (also called NT-Xent or momentum contrast), which can be derived as maximizing a lower bound on the mutual information \(I(x; x^+)\):
+    \[
+        \mathcal{L}_{\text{NCE}}(\theta) = -\mathbb{E} \left[ \log \frac{\exp(f_\theta(x)^\top f_\theta(x^+) / \tau)}{\exp(f_\theta(x)^\top f_\theta(x^+) / \tau) + \sum_{k=1}^K \exp(f_\theta(x)^\top f_\theta(x^-_k) / \tau)} \right]
+    \]
+    where \(\tau > 0\) is a \textit{temperature} hyperparameter. The loss is minimized when the encoder assigns high cosine similarity to positive pairs and low similarity to negative pairs.
+\end{concept}
+ 
+\begin{remark}
+    \textbf{Why mutual information?} Intuitively, \(I(x; x^+) = \mathcal{H}(x^+) - \mathcal{H}(x^+ \mid x)\) is large if knowing \(x\) tells us a lot about \(x^+\). Maximizing \(I(x; x^+)\) therefore encourages the encoder to capture the shared, semantically meaningful structure between \(x\) and its positive counterpart. The InfoNCE loss provides a lower bound on this mutual information: since the log-sum-exp denominator upper-bounds the true partition function of the unnormalized distribution \(\exp(f_\theta(x)^\top f_\theta(\cdot) / \tau)\), minimizing \(\mathcal{L}_{\text{NCE}}\) pushes up a tractable estimate of \(I(x; x^+)\).
+ 
+    \textbf{Positive pair construction.} The utility of contrastive learning depends critically on what counts as a ``positive''. In computer vision, positives are typically \textit{augmented views} of the same image (crops, color jitters, flips). In RL, the most natural choice for temporally structured data is \textit{states visited near each other in time}, as we will see throughout this section.
+ 
+    \textbf{Temperature.} \(\tau\) controls the sharpness of the distribution. Small \(\tau\) concentrates probability mass on the hardest negative (most similar to the anchor), encouraging fine-grained discrimination but potentially destabilizing training. Large \(\tau\) softens the comparison and is more forgiving.
+\end{remark}
+ 
+\subsection{CURL: Contrastive Representation Learning for RL}
+ 
+\begin{concept}[CURL (Laskin et al., 2020)]
+    The core difficulty of applying deep RL to pixel-based observations (e.g., raw image inputs from Atari or DMControl) is that the observation space is high-dimensional, noisy, and contains many irrelevant features (background textures, lighting). CURL (\textit{Contrastive Unsupervised Representations for Reinforcement Learning}) addresses this by augmenting any model-free RL algorithm (such as SAC or Rainbow) with a contrastive auxiliary loss that trains the encoder to produce compact, task-relevant representations.
+ 
+    Concretely, given observation \(o_t\), CURL generates two augmented views via random crops:
+    \[
+        q = f_\theta(\text{aug}(o_t)), \quad k^+ = f_{\bar\theta}(\text{aug}(o_t))
+    \]
+    where \(f_\theta\) is the \textit{query encoder} and \(f_{\bar\theta}\) is a \textit{momentum encoder} with parameters \(\bar\theta = m \bar\theta + (1 - m)\theta\); that is, updated by Polyak averaging with \(m \approx 0.999\). Negatives \(\{k^-_i\}\) are drawn from other observations in the minibatch. The contrastive loss uses a learned bilinear similarity \(\text{sim}(q, k) = q^\top W k\) rather than raw cosine similarity, giving:
+    \[
+        \mathcal{L}_{\text{CURL}} = -\log \frac{\exp(q^\top W k^+ / \tau)}{\exp(q^\top W k^+ / \tau) + \sum_{i} \exp(q^\top W k^-_i / \tau)}
+    \]
+    The total training objective is \(\mathcal{L}_{\text{RL}} + \lambda \mathcal{L}_{\text{CURL}}\), where \(\mathcal{L}_{\text{RL}}\) is the standard RL loss (e.g., the SAC objective or DQN Bellman error) and the encoder \(f_\theta\) is shared.
+\end{concept}
+ 
+\begin{remark}
+    \textbf{Why a momentum encoder?} Without it, both \(q\) and \(k^+\) are functions of the same parameters \(\theta\), and naive gradient descent collapses: the encoder can minimize the loss by mapping all observations to the same representation. The momentum encoder creates a slowly-moving, stable target. This is directly analogous to the \textit{target network} in DQN, which we saw earlier was necessary for the same reason.
+ 
+    \textbf{What CURL achieves.} By encouraging the encoder to produce similar representations for different augmented views of the same observation, the auxiliary loss implicitly enforces \textit{augmentation invariance}: the representation should capture content (the agent's location, task-relevant objects), not style (exact pixel values, crop offsets). This allows the RL agent to learn from far fewer environment interactions when operating on pixels.
+ 
+    \textbf{Limitations and context.} CURL treats contrastive learning as a \textit{representation-learning auxiliary}: it helps the encoder but does not change the reward or the objective. The agent still needs environment reward to learn task-relevant behavior. The next set of methods go further, using mutual information to \textit{replace} or \textit{supplement} the reward signal.
+\end{remark}
+ 
+\subsection{Mutual Information as an Intrinsic Reward}
+ 
+We now shift from using contrastive methods to improve observation encoders to using them to generate intrinsic reward signals. The key idea is to define an objective purely in terms of the agent's trajectory---without any external reward---by asking: \textit{how much information does the agent's behavior convey?}
+ 
+\begin{concept}[Mutual Information in RL]
+    Let \(z\) be a latent variable (a ``skill'' or ``goal'') drawn from a prior \(p(z)\), and let \(s\) be a state visited by the agent when executing the behavior associated with \(z\). The \textit{mutual information between \(z\) and \(s\)} is
+    \[
+        I(s; z) = H(z) - H(z \mid s) = H(s) - H(s \mid z)
+    \]
+    We can interpret these two decompositions as follows:
+    \begin{itemize}
+        \item \(H(z) - H(z \mid s)\): the skill \(z\) should be \textit{identifiable} from the state \(s\). Given a visited state, an observer should be able to infer which skill the agent was using (low \(H(z \mid s)\)), and the skills themselves should be diverse (high \(H(z)\)).
+        \item \(H(s) - H(s \mid z)\): each skill should produce a \textit{distinct distribution over states} (high \(H(s)\)), and conditioning on the skill should reduce uncertainty about which states are visited (low \(H(s \mid z)\)).
+    \end{itemize}
+    Maximizing \(I(s; z)\) gives the agent an unsupervised objective that drives it to explore diverse, distinguishable behaviors without any hand-designed reward.
+\end{concept}
+ 
+\begin{remark}
+    \textbf{The role of the lower bound.} The mutual information \(I(s; z)\) is generally intractable to compute exactly, since it requires integrating over the state distribution \(p(s \mid z)\) induced by the agent's policy. In practice, we use a \textit{variational lower bound}: introduce a learned discriminator \(q_\phi(z \mid s)\) (the ``posterior'' over skills given the state), and write
+    \[
+        I(s; z) = H(z) - H(z \mid s) \geq H(z) + \mathbb{E}_{s, z}[\log q_\phi(z \mid s)]
+    \]
+    using the fact that \(H(z \mid s) \leq -\mathbb{E}[\log q_\phi(z \mid s)]\) for any \(q_\phi\) (this is an instance of the general inequality \(\KL{p}{q} \geq 0\) applied to the conditional). We can then maximize this lower bound by jointly training the policy and discriminator.
+\end{remark}
+ 
+\subsection{Diversity is All You Need (DIAYN)}
+ 
+\begin{concept}[DIAYN (Eysenbach et al., 2019)]
+    DIAYN (\textit{Diversity is All You Need}) instantiates the mutual information objective to learn a diverse set of skills in a completely unsupervised way---no task reward is used during training.
+ 
+    \textbf{Setup.} Fix a categorical prior \(p(z) = \text{Uniform}(\{1, \dots, K\})\) over \(K\) discrete skills. A skill-conditioned policy \(\pi_\theta(a \mid s, z)\) is trained alongside a discriminator \(q_\phi(z \mid s)\). The intrinsic reward at each step is defined as
+    \[
+        r^z(s, z) = \log q_\phi(z \mid s) - \log p(z)
+    \]
+    This is the \textit{log ratio} of the posterior to the prior. Intuitively, the agent is rewarded for visiting states that allow an observer to determine \textit{which skill} is being executed.
+ 
+    The training procedure alternates between:
+    \begin{enumerate}
+        \item \textbf{Policy update:} Update \(\theta\) using any off-the-shelf RL algorithm (e.g., SAC) with intrinsic reward \(r^z(s, z)\).
+        \item \textbf{Discriminator update:} Update \(\phi\) by maximizing the log-likelihood \(\mathbb{E}_{s, z}[\log q_\phi(z \mid s)]\) over transitions collected by the policy.
+    \end{enumerate}
+ 
+    At the end of training, the learned skills can be composed or fine-tuned on downstream tasks with sparse environment reward.
+\end{concept}
+ 
+\begin{remark}
+    \textbf{Why does this objective produce useful skills?} To see this, observe that maximizing \(\mathbb{E}[\log q_\phi(z \mid s) - \log p(z)]\) is equivalent to maximizing the variational lower bound on \(I(s; z)\):
+    \begin{align*}
+        \mathbb{E}_{z \sim p(z), s \sim p(s \mid z)} [\log q_\phi(z \mid s) - \log p(z)]
+        &= \mathbb{E}_{z, s}[\log q_\phi(z \mid s)] + H(z)
+    \end{align*}
+    which is exactly the lower bound on \(I(s; z) = H(z) + \mathbb{E}[\log p(z \mid s)]\) from the previous section (replacing the true posterior \(p(z \mid s)\) with the learned approximation \(q_\phi(z \mid s)\)). So, DIAYN trains the policy to maximize a tractable proxy for skill-state mutual information.
+ 
+    \textbf{What skills does DIAYN learn?} In practice, the skills tend to correspond to distinct locomotion behaviors (walking, hopping, spinning) or distinct regions of the state space. The diversity emerges because different skills ``compete'' for different states: if skill \(z = 1\) visits state \(s\), then the discriminator is trained to output \(q_\phi(z=1 \mid s) \approx 1\). Skill \(z = 2\) is then penalized for visiting \(s\) (it would receive a low reward \(\log q_\phi(z=2 \mid s) \approx \log 0\)), so it is pushed toward visiting different states.
+ 
+    \textbf{Entropy regularization.} DIAYN is typically paired with maximum-entropy RL (e.g., SAC), which adds an entropy bonus \(\alpha H(\pi(\cdot \mid s, z))\) to encourage the policy to be stochastic. This prevents collapse to deterministic behaviors and improves exploration.
+ 
+    \textbf{Limitations.} DIAYN uses a discrete, fixed set of skills and a discriminator over single states, which means it may fail to discover skills that are only distinguishable by their \textit{trajectory} rather than any single visited state. We will see two remedies for this: CIC addresses the representation quality of the discriminator, while MISL addresses the trajectory-level formulation.
+\end{remark}
+ 
+\subsection{Mutual Information Skill Learning (MISL)}
+ 
+DIAYN uses a tabular or feedforward discriminator that maps individual states to skill posteriors. This is limiting: two skills that visit the same distribution of individual states but follow different \textit{paths} through state space cannot be distinguished. MISL addresses this by enriching the mutual information objective to capture trajectory-level structure.
+ 
+\begin{concept}[MISL (Hartikainen et al., 2019)]
+    MISL (\textit{Mutual Information Skill Learning}) formulates skill discovery as maximizing the mutual information between the \textit{trajectory} of the agent and the skill variable, rather than just the final state:
+    \[
+        I(\tau; z) = H(z) - H(z \mid \tau)
+    \]
+    where \(\tau = (s_0, a_0, s_1, a_1, \dots)\) is the full trajectory. Since operating on full trajectories is computationally expensive, MISL typically conditions the mutual information objective on a trajectory \textit{summary statistic} (e.g., the initial and final state) or uses a recurrent discriminator \(q_\phi(z \mid \tau)\).
+ 
+    The intrinsic reward is again derived from the variational lower bound, now applied to the trajectory-level posterior:
+    \[
+        r^z(\tau, z) = \log q_\phi(z \mid \tau) - \log p(z)
+    \]
+    The policy is updated to maximize the discounted sum of these intrinsic rewards, and the discriminator is updated via supervised learning on collected trajectory--skill pairs.
+\end{concept}
+ 
+\begin{remark}
+    \textbf{Trajectory-level discrimination enables finer skill distinctions.} Consider two skills that both navigate a maze but one takes a clockwise path and the other counterclockwise. Both visit similar sets of individual states, so a state-only discriminator cannot distinguish them. A trajectory-level discriminator, however, can observe the \textit{order} of state visitations and correctly identify each skill.
+ 
+    \textbf{Practical implementation.} A common simplification is to condition on a pair \((s_0, s_T)\) rather than the full trajectory, approximating \(I(s_T \mid s_0; z)\). This captures \textit{which final state was reached from which initial state}---a notion of ``goal-directedness'' that intermediate-state discrimination misses---while remaining computationally tractable.
+ 
+    \textbf{Connection to goal-conditioned RL.} The factorization \(I(s_T \mid s_0; z)\) bears a striking resemblance to the goal-conditioned RL setup, where the agent is rewarded for reaching a target state \(g\) from an initial state \(s_0\). We will formalize this connection later by showing that contrastive methods can directly implement goal-conditioned value functions.
+\end{remark}
+ 
+\subsection{Contrastive Intrinsic Control (CIC)}
+ 
+DIAYN and MISL both decompose the mutual information objective into a policy learning phase and a discriminator learning phase. A natural question is: \textit{can we use contrastive learning---rather than a softmax classifier---to implement the discriminator?} CIC answers yes, and shows that doing so leads to better-structured, more continuous skill spaces.
+ 
+\begin{concept}[CIC (Laskin et al., 2022)]
+    CIC (\textit{Contrastive Intrinsic Control}) replaces the discrete skill posterior \(q_\phi(z \mid s)\) of DIAYN with a contrastive representation. The key observation is that the mutual information lower bound
+    \[
+        I(s; z) \geq H(z) + \mathbb{E}_{s, z}[\log q_\phi(z \mid s)]
+    \]
+    can be maximized using an InfoNCE-style objective instead of a cross-entropy classifier, enabling \textit{continuous} skill spaces \(z \in \mathbb{R}^d\).
+ 
+    \textbf{Architecture.} CIC maintains:
+    \begin{itemize}
+        \item A \textit{state encoder} \(g_\theta : \mathcal{S} \to \mathbb{R}^d\) that maps states to a latent space.
+        \item A \textit{skill encoder} \(h_\psi : \mathcal{Z} \to \mathbb{R}^d\) that maps skills (continuous vectors) to the same latent space.
+    \end{itemize}
+    A skill-state pair \((z, s)\) is treated as a \textit{positive pair} if \(s\) was actually visited by the policy under skill \(z\). Pairs \((z, s')\) from different skill-trajectory combinations form negatives. The contrastive loss is
+    \[
+        \mathcal{L}_{\text{CIC}} = -\mathbb{E}\left[\log \frac{\exp(g_\theta(s)^\top h_\psi(z) / \tau)}{\sum_{(s', z') \in \mathcal{N}} \exp(g_\theta(s')^\top h_\psi(z') / \tau)}\right]
+    \]
+    The intrinsic reward is the \textit{particle-based entropy estimate} of the skill-conditioned state distribution, approximating \(H(s \mid z)\) by measuring how spread out the embeddings \(g_\theta(s)\) are for fixed \(z\).
+\end{concept}
+ 
+\begin{remark}
+    \textbf{Continuous skills and the skill manifold.} Unlike DIAYN's discrete categories, CIC's continuous skill space \(\mathcal{Z} = \mathbb{R}^d\) allows for \textit{smooth interpolation} between behaviors: skills close in embedding space should produce similar behaviors, enabling structured exploration and hierarchical control.
+ 
+    \textbf{Particle-based entropy.} A key technical contribution of CIC is an efficient estimator for the state coverage entropy \(H(s \mid z)\). Rather than fitting an explicit density model, CIC uses a \(k\)-nearest-neighbor entropy estimator on the embeddings \(\{g_\theta(s_i)\}\): the entropy is approximated by measuring the average log-distance to the nearest neighbors, which is high when embeddings are spread out (good coverage) and low when they are clustered (poor coverage).
+ 
+    \textbf{Synthesis.} CIC can be seen as a synthesis of CURL and DIAYN: it borrows the contrastive, augmentation-based training of CURL to learn a representation, and uses that representation to implement the discriminator of DIAYN, but with a continuous skill space. This makes it a natural bridge to the next result, which shows that contrastive representations can directly encode value functions.
+\end{remark}
+ 
+\subsection{Contrastive RL as Goal-Conditioned RL}
+ 
+The methods above treat contrastive learning as a way to build representations or discriminators that are \textit{used by} an RL agent. Eysenbach et al.\ (2022) establish a deeper connection: under the right choice of contrastive objective and positive/negative pair construction, contrastive learning \textit{directly solves} a goal-conditioned RL problem. The representation that emerges is not merely a useful feature---it \textit{is} the optimal value function.
+ 
+\begin{concept}[Goal-Conditioned Reinforcement Learning]
+    In goal-conditioned RL (GCRL), the agent is rewarded for reaching a goal state \(g \in \mathcal{S}\). The reward is typically \(r(s, g) = -\mathbf{1}[s \neq g]\) (negative distance) or \(r(s, g) = \mathbf{1}[s = g]\) (indicator). The goal-conditioned value function is
+    \[
+        V^\pi(s, g) = \mathbb{E}_\pi\left[\sum_{t=0}^\infty \gamma^t r(s_t, g) \,\biggr\rvert\, s_0 = s\right]
+    \]
+    and the goal-conditioned Q-function \(Q^\pi(s, a, g)\) is defined analogously. The optimal policy is \(\pi^*(a \mid s, g) = \argmax_a Q^*(s, a, g)\).
+\end{concept}
+ 
+\begin{concept}[Contrastive RL (Eysenbach et al., 2022)]
+    Contrastive RL (\textit{Contrastive Learning as Goal-Conditioned RL}) proves that the Q-function of a goal-conditioned agent with geometric temporal discounting has a contrastive structure. Specifically, consider the successor representation (SR) framework: define the \textit{discounted state occupancy} between \(s\) and \(g\) as
+    \[
+        C(s, a, g) = (1 - \gamma)\sum_{t=0}^\infty \gamma^t p(s_t = g \mid s_0 = s, a_0 = a)
+    \]
+    which is the total discounted probability of reaching \(g\) from \((s, a)\). When the reward is the indicator \(r(s_t, g) = \mathbf{1}[s_t = g]\), we have \(Q^\pi(s, a, g) \propto C^\pi(s, a, g)\).
+ 
+    The key insight is that \(C^\pi(s, a, g)\) has a \textbf{contrastive factorization}. Let \(\phi_\theta : \mathcal{S} \times \mathcal{A} \to \mathbb{R}^d\) be a representation of \((s, a)\) pairs and \(\psi_\theta : \mathcal{S} \to \mathbb{R}^d\) a representation of goal states. Define
+    \[
+        \hat{C}_\theta(s, a, g) = \sigma\!\left(\phi_\theta(s, a)^\top \psi_\theta(g)\right)
+    \]
+    for sigmoid \(\sigma\). Then the following contrastive objective is equivalent to temporal difference learning of \(C^\pi\):
+    \[
+        \mathcal{L}_{\text{CRL}} = -\mathbb{E}\left[\log \hat{C}_\theta(s, a, g^+) + \log(1 - \hat{C}_\theta(s, a, g^-))\right]
+    \]
+    where \textbf{positive pairs} \((s, a, g^+)\) are constructed by sampling \(g^+\) as a \textit{future state actually visited by the agent from} \((s, a)\): specifically, \(g^+ = s_{t+k}\) for \(k \sim \text{Geom}(1 - \gamma)\). \textbf{Negative pairs} \((s, a, g^-)\) sample \(g^-\) from the marginal state distribution \(d^\pi\) independent of \((s, a)\).
+\end{concept}
+ 
+\begin{remark}
+    \textbf{Why future states as positives?} The geometric sampling \(k \sim \text{Geom}(1 - \gamma)\) is precisely the distribution over future states induced by the \(\gamma\)-discounted Bellman operator. Therefore, a state \(g\) sampled by this procedure is \textit{more likely to appear as a positive if it is frequently reachable from \((s, a)\)}, exactly matching the definition of \(C^\pi(s, a, g)\). In other words, contrastive training with temporally structured positives \textit{implements Bellman backup} in representation space.
+ 
+    \textbf{Binary cross-entropy as TD learning.} The loss \(\mathcal{L}_{\text{CRL}}\) is a binary cross-entropy (logistic regression) loss with positive examples being future states and negative examples being random states. The sigmoid output \(\hat{C}_\theta(s, a, g) \in (0,1)\) can be interpreted as the probability that \(g\) is a future state of \((s, a)\)---and this is exactly the normalized Q-value \(Q^\pi(s, a, g) / Q^{\max}\). So, the representation \(\phi_\theta(s, a)^\top \psi_\theta(g)\) implicitly encodes the optimal value function: \textit{learning a representation is learning a value function}.
+ 
+    \textbf{Policy extraction.} Given \(\hat C_\theta\), the greedy policy is
+    \[
+        \pi(a \mid s, g) = \argmax_a \hat{C}_\theta(s, a, g) = \argmax_a \phi_\theta(s, a)^\top \psi_\theta(g)
+    \]
+    This is computationally cheap: policy improvement is just a dot-product maximization in the representation space, without any Bellman iteration at test time.
+ 
+    \textbf{Connections to prior work.} This result unifies and explains the heuristics used in DIAYN and CIC. In both methods, the discriminator \(q_\phi(z \mid s)\) was trained with a contrastive-like objective and used to generate intrinsic rewards. Contrastive RL reveals the precise sense in which this is principled: the discriminator is approximating the discounted future state occupancy \(C^\pi(s, z)\), which \textit{is} the Q-function of the corresponding goal-conditioned problem.
+\end{remark}
+
+
+Copy
+
+\subsection{Goal-Conditioned Reinforcement Learning}
+ 
+The preceding subsection introduced goal-conditioned RL (GCRL) as a formal framework and showed that contrastive learning can directly solve it. Here we develop GCRL as an independent subject: what makes it fundamentally different from standard RL, what challenges arise, and what algorithmic ideas have been proposed to address them. The treatment draws heavily on the survey of Liu et al.\ (2022), which provides a systematic taxonomy of the field.
+ 
+\begin{concept}[Goal-Augmented Markov Decision Process]
+    Standard RL operates on an MDP \(\mathcal{M} = \langle \mathcal{S}, \mathcal{A}, T, r, \gamma, \rho_0 \rangle\), where the reward function \(r : \mathcal{S} \times \mathcal{A} \to \mathbb{R}\) is fixed and the agent learns a single policy \(\pi : \mathcal{S} \to \Delta(\mathcal{A})\). GCRL generalizes this by augmenting the MDP with a \textit{goal space} \(\mathcal{G}\), a \textit{goal distribution} \(p_g\), and a \textit{goal-mapping function} \(\phi : \mathcal{S} \to \mathcal{G}\) that projects states onto the goal space. The resulting \textbf{goal-augmented MDP} (GA-MDP) is the tuple \(\langle \mathcal{S}, \mathcal{A}, T, r, \gamma, \rho_0, \mathcal{G}, p_g, \phi \rangle\), where the reward is now goal-dependent, \(r : \mathcal{S} \times \mathcal{A} \times \mathcal{G} \to \mathbb{R}\), and the objective is
+    \[
+        J(\pi) = \mathbb{E}_{\substack{g \sim p_g \\ a_t \sim \pi(\cdot \mid s_t, g) \\ s_{t+1} \sim T(\cdot \mid s_t, a_t)}} \left[ \sum_{t=0}^\infty \gamma^t r(s_t, a_t, g) \right]
+    \]
+    The agent must learn a \textit{goal-conditioned policy} \(\pi(a \mid s, g)\) that performs well across the entire distribution of goals, not just for one fixed task.
+\end{concept}
+ 
+\begin{remark}
+    \textbf{Three notions of goal.} Liu et al.\ distinguish three concepts that are easily conflated:
+    \begin{itemize}
+        \item \textit{Desired goal}: the target specified by the task or environment (e.g., ``move the block to position \(x\)'').
+        \item \textit{Achieved goal}: the goal corresponding to whatever state the agent actually reaches, \(\phi(s_t)\).
+        \item \textit{Behavioral goal}: the goal the agent conditions on during a rollout, which may differ from the desired goal if sub-goal replacement is used.
+    \end{itemize}
+    The distinction between desired and achieved goals is central to hindsight methods (discussed below): when the agent fails to reach the desired goal, the achieved goal can still provide a useful learning signal.
+ 
+    \textbf{When \(\mathcal{G} \subseteq \mathcal{S}\).} In the simplest and most common case, goals are states (or projections of states), so \(\phi\) is either the identity or a coordinate projection. For example, in robotic manipulation, the full state might include joint angles, velocities, and the object pose, but the goal is only the target object position---a subspace of the state. This is the setting assumed by Contrastive RL, where goals \(g \in \mathcal{S}\) are future states.
+ 
+    \textbf{Relationship to multi-task learning.} GCRL can be viewed as multi-task learning where each goal defines a separate task, and all tasks share the same dynamics but differ in their reward functions. The objective \(J(\pi) = \mathbb{E}_{g \sim p_g}[J_g(\pi)]\) is an expectation over task-specific objectives, and the goal-conditioned policy shares parameters across all tasks. This is precisely the structure exploited by universal value function approximators.
+\end{remark}
+ 
+\begin{concept}[Universal Value Function Approximators (Schaul et al., 2015)]
+    The foundational architectural idea in GCRL is to parameterize value functions as functions of \textit{both} the state and the goal. The \textbf{universal value function approximator} (UVFA) extends the standard value function to
+    \[
+        V^\pi(s, g;\, \theta), \qquad Q^\pi(s, a, g;\, \theta)
+    \]
+    where \(\theta\) is shared across all goals. In practice, the goal \(g\) is simply concatenated with the state \(s\) (or with the state-action pair \((s, a)\)) as input to the neural network. The UVFA can then be trained with any standard RL algorithm (DQN, SAC, etc.)\ by conditioning each update on the goal associated with that transition.
+ 
+    The key benefit is \textit{generalization}: because the network must predict values for a continuum of goals, it is forced to learn features that capture the structure of the goal space. A UVFA trained on goals \(g_1, \dots, g_k\) can generalize to unseen goals \(g'\) if the representation is sufficiently smooth.
+\end{concept}
+ 
+\begin{remark}
+    \textbf{Connection to Contrastive RL.} The bilinear form \(\hat{C}_\theta(s, a, g) = \sigma(\phi_\theta(s,a)^\top \psi_\theta(g))\) Contrastive RL is a particular \textit{factored} UVFA: rather than passing \((s, a, g)\) through a monolithic network, it decomposes the value function into a state-action encoder and a goal encoder whose interaction is a dot product. This factorization is what enables the contrastive training procedure, but the underlying idea---a single network that takes goals as input---is exactly the UVFA framework.
+ 
+    \textbf{Generalization vs.\ memorization.} A UVFA that memorizes value tables for each goal separately would be no better than training independent agents. The power of the approach lies in the inductive bias of the shared network: goals that are ``nearby'' in some learned metric should have similar value landscapes. This is the multi-task generalization property that makes GCRL tractable even when the goal space is continuous and high-dimensional.
+\end{remark}
+ 
+\subsubsection{The Sparse Reward Problem and Hindsight Experience Replay}
+ 
+\begin{concept}[Sparse Rewards in GCRL]
+    The most natural reward function for goal-reaching is a binary indicator:
+    \[
+        r(s_t, a_t, g) = \mathbf{1}\!\left[\|\phi(s_{t+1}) - g\| \leq \epsilon\right]
+    \]
+    for some tolerance \(\epsilon > 0\). This reward is \textit{maximally sparse}: the agent receives a signal of \(+1\) only when it reaches the goal, and \(0\) everywhere else. In high-dimensional continuous control, reaching any specific goal by random exploration is astronomically unlikely, so the agent may collect thousands of episodes without ever observing a nonzero reward. Standard RL algorithms (DQN, SAC, policy gradients) all require informative reward signals to make progress, so they fail catastrophically under this level of sparsity.
+ 
+    An obvious fix is \textbf{reward shaping}: replace the sparse indicator with a dense distance-based reward, \(\tilde{r}(s_t, a_t, g) = -\|\phi(s_{t+1}) - g\|\). While this provides gradient signal everywhere, it introduces a new problem: the shaped reward may create spurious local optima. For example, if the agent must move \textit{away} from the goal before eventually reaching it (e.g., navigating around an obstacle), the distance penalty punishes the correct initial behavior.
+\end{concept}
+ 
+\begin{remark}
+    \textbf{Why sparsity is worse in GCRL than in standard RL.} In standard RL with a fixed task, the agent can occasionally stumble onto reward by chance if the reward region is not too small. In GCRL, the agent must reach a \textit{specific} goal sampled from \(p_g\), and the probability of randomly reaching any particular goal shrinks exponentially with the dimension of the goal space. Moreover, even when the agent does reach a goal, the experience is only directly useful for that one goal---it does not immediately help with other goals. This is the fundamental sample-efficiency bottleneck that all GCRL algorithms must address.
+\end{remark}
+ 
+\begin{concept}[Hindsight Experience Replay (Andrychowicz et al., 2017)]
+    Hindsight Experience Replay (HER) is the single most important algorithmic idea in GCRL. It is motivated by the observation that even a failed episode contains useful information: if the agent was trying to reach goal \(g\) but ended up at state \(s_T\), then the trajectory is a \textit{successful} demonstration of how to reach the achieved goal \(\phi(s_T)\).
+ 
+    Formally, suppose the agent collects a trajectory \(\tau = (s_0, a_0, s_1, a_1, \dots, s_T)\) while pursuing desired goal \(g\). HER stores \(\tau\) in the replay buffer with the original goal, but also stores \textit{additional copies} of \(\tau\) with relabeled goals. Several relabeling strategies are possible:
+    \begin{itemize}
+        \item \textbf{Final}: relabel with the achieved goal at the end of the episode, \(g' = \phi(s_T)\).
+        \item \textbf{Future}: for each transition \((s_t, a_t, s_{t+1})\), relabel with a randomly chosen future achieved goal \(g' = \phi(s_{t'})\) for \(t' > t\).
+        \item \textbf{Episode}: relabel with any achieved goal from the same episode.
+        \item \textbf{Random}: relabel with an achieved goal from any episode in the buffer.
+    \end{itemize}
+    After relabeling, the reward is recomputed using the new goal: \(r' = r(s_t, a_t, g')\). Since \(g'\) was actually reached by the trajectory, the relabeled transition has nonzero reward, transforming a failed experience into a successful one. The relabeled transitions are then used to train the UVFA via any off-policy algorithm (typically DDPG or SAC).
+\end{concept}
+ 
+\begin{remark}
+    \textbf{Why HER works.} The key insight is that \textit{off-policy algorithms do not care which goal the agent was pursuing when the data was collected}---they only care about the transition \((s, a, s', r, g)\). By relabeling \(g\), we create valid training data for a different goal without any additional environment interaction. In effect, every trajectory simultaneously teaches the agent how to reach many different goals, turning the sparsity problem on its head: even when the agent fails at the desired goal, it succeeds at many hindsight goals.
+ 
+    \textbf{The ``future'' strategy dominates.} Among the relabeling strategies, ``future'' tends to work best empirically because it creates a natural curriculum: for each transition \((s_t, a_t)\), the relabeled goals are states that are actually reachable from \(s_t\) within the remaining horizon, providing appropriately challenging targets. The ``final'' strategy is a special case that only uses the terminal state, wasting the intermediate states.
+ 
+    \textbf{Connection to Contrastive RL.} There is a deep structural parallel between HER and the positive-pair construction in Contrastive RL. Both methods use \textit{future states from the same trajectory} as targets: HER relabels goals with future achieved states, while Contrastive RL defines positive pairs as \((s_t, s_{t+k})\) for geometrically sampled \(k\). In both cases, the fundamental mechanism is the same: repurposing the agent's own trajectory as a source of goal supervision. Contrastive RL can be seen as providing the theoretical justification for why this procedure works---it is implicitly performing TD learning on the discounted state occupancy.
+ 
+    \textbf{Hindsight and inverse RL.} Eysenbach et al.\ (2020) showed that HER can be interpreted as a special case of maximum-entropy inverse RL: relabeling goals is equivalent to inferring a reward function that makes the observed trajectory optimal, which is precisely the inverse RL problem. This connection suggests that more sophisticated inverse RL methods could yield improved relabeling strategies.
+\end{remark}
+ 
+\subsubsection{Goal Representations}
+ 
+\begin{concept}[Goal Representations Beyond State Vectors]
+    The simplest GCRL setting defines \(\mathcal{G} \subseteq \mathcal{S}\) with \(\phi = \text{id}\), so that goals are target states. However, the goal-augmented MDP framework is flexible enough to accommodate richer representations:
+    \begin{itemize}
+        \item \textbf{Feature vectors}: the goal is a subspace of the state, e.g., the target position of an object while ignoring joint angles. Here \(\phi\) is a coordinate projection.
+        \item \textbf{Images}: the goal is a target image (e.g., a photo of the desired object arrangement). The mapping \(\phi\) is typically a learned encoder (e.g., a VAE) that embeds both states and goals into a shared latent space where distances are meaningful.
+        \item \textbf{Language}: the goal is a natural-language instruction (e.g., ``go to the blue torch''). Here \(\phi\) maps states to a language-compatible embedding, and the reward measures alignment between the achieved state embedding and the instruction embedding.
+        \item \textbf{Expected returns}: the goal specifies a \textit{desired cumulative reward} \(R\), and the policy \(\pi(a \mid s, R)\) is conditioned on the target return. This is the idea behind Decision Transformer (Chen et al., 2021) and upside-down RL (Schmidhuber, 2019), which treat reward-to-go as a goal and solve RL via supervised sequence modeling.
+    \end{itemize}
+\end{concept}
+ 
+\begin{remark}
+    \textbf{Why the choice of goal representation matters.} The goal representation determines the structure of the reward function, the difficulty of generalization, and the applicable set of algorithms. For vector goals in a known subspace, rewards can be computed exactly via \(\ell_2\) distance and HER applies directly. For image goals, the reward computation requires a learned distance in embedding space, and the quality of the embedding critically affects learning. Language goals introduce an additional challenge: the mapping from language to grounded behavior requires compositional understanding.
+ 
+    \textbf{Learned goal spaces.} When raw goal representations are high-dimensional (e.g., images), it is often beneficial to learn a compact \textit{latent goal space} \(\mathcal{Z}\) via an encoder \(E : \mathcal{G} \to \mathcal{Z}\). The policy and value function then operate on \(\mathcal{Z}\) rather than the raw goal. This is precisely what methods like CIC do with their continuous skill space, and what variational goal-conditioned methods (e.g., RIG; Nair et al., 2018) do by training a VAE on goal images. The latent space should be structured so that Euclidean distance in \(\mathcal{Z}\) corresponds to behavioral distance (i.e., how many steps it takes to get from one goal to another), which connects directly to the quasimetric and contrastive representation ideas discussed elsewhere in this section.
+\end{remark}
+ 
+\subsubsection{Sub-Goal Generation and Curriculum Learning}
+ 
+\begin{concept}[Sub-Goal Decomposition]
+    When the desired goal \(g\) is far from the agent's current capabilities (long-horizon tasks), even HER may not provide sufficient signal because the agent rarely visits states close to \(g\). A natural solution, inspired by how humans decompose complex tasks, is to introduce \textit{sub-goals}: intermediate waypoints \(g_1, g_2, \dots, g_n = g\) such that each consecutive sub-goal \(g_{i+1}\) is reachable from \(g_i\) with the agent's current skill level. The agent then conditions on each sub-goal in sequence. This decomposes the original long-horizon problem into a sequence of shorter, more tractable problems.
+ 
+    Formally, this replaces the environment's goal distribution \(p_g\) with a learned or heuristic distribution \(f\) over sub-goals:
+    \[
+        J(\pi) = \mathbb{E}_{\substack{g \sim f \\ a_t \sim \pi(\cdot \mid s_t, g)}} \left[ \sum_t \gamma^t r(s_t, a_t, g) \right]
+    \]
+    The design of \(f\) is the central question, and several principles have been proposed.
+\end{concept}
+ 
+\begin{remark}
+    \textbf{Intermediate difficulty.} A good sub-goal should be \textit{just beyond} the agent's current abilities: too easy provides no new information, too hard reproduces the original sparse-reward problem. Florensa et al.\ (2018) operationalize this by training a GAN to generate goals of calibrated difficulty, where difficulty is measured by the agent's success rate. The generator learns to produce goals at the frontier of the agent's competence, creating an automatic curriculum.
+ 
+    \textbf{Exploration-aware goal selection.} Rather than targeting specific goals, another strategy maximizes the \textit{coverage} of the goal space. Pitis et al.\ (2020) sample sub-goals that maximize the entropy of historically achieved goals, encouraging the agent to visit diverse states rather than repeatedly practicing easy goals. This is analogous to the entropy-based intrinsic rewards in CIC, but applied at the level of goal selection rather than reward design.
+ 
+    \textbf{Graph search on the replay buffer.} Eysenbach et al.\ (2019) propose a particularly elegant approach: build a graph whose nodes are states in the replay buffer and whose edge weights are distances estimated by the value function. Given a far-away target goal \(g\), a shortest-path algorithm (e.g., Dijkstra) on this graph produces a sequence of waypoints through previously visited states, which the agent follows as a sequence of sub-goals. This uses the replay buffer not just as a data store but as a \textit{map} of the environment.
+ 
+    \textbf{Connection to hierarchical RL.} Sub-goal generation is closely related to hierarchical RL, where a high-level policy selects sub-goals and a low-level policy executes them. The key difference in GCRL is that the same goal-conditioned policy serves as the low-level executor for all sub-goals, so the hierarchy is primarily a planning mechanism rather than a skill-learning mechanism. The high-level policy (or planner) proposes ``where to go next,'' and the universal low-level policy handles ``how to get there.''
+\end{remark}
+ 
+\subsubsection{Synthesis: GCRL as a Unifying Lens}
+ 
+\begin{remark}
+    Goal-conditioned RL provides a unifying perspective on several themes developed throughout these notes:
+ 
+    \textbf{From intrinsic motivation to goal-conditioning.} The skill-discovery methods DIAYN and CIC train policies conditioned on a skill variable \(z\), which is formally identical to a goal. The discriminator-based intrinsic reward \(\log q_\phi(z \mid s)\) can be reinterpreted as a goal-conditioned reward that measures whether the agent has ``reached'' the behavior specified by \(z\). GCRL makes this implicit goal structure explicit.
+ 
+    \textbf{From contrastive representations to value functions.} Contrastive RL (Eysenbach et al., 2022) showed that the GCRL value function has a contrastive factorization, so that learning a contrastive representation \textit{is} learning a goal-conditioned value function. This resolves a longstanding question about why contrastive pre-training helps RL: it is not merely a useful initialization trick, but is performing implicit Bellman backup.
+ 
+    \textbf{From HER to temporal contrastive learning.} The ``future'' relabeling strategy in HER and the positive-pair construction in Contrastive RL are two implementations of the same principle: future states from the agent's own trajectory serve as natural goal supervision. HER operationalizes this via replay-buffer relabeling; Contrastive RL operationalizes it via the contrastive loss. The CTRL framework then extends this to multi-step compositional reasoning.
+ 
+    \textbf{Remaining challenges.} Despite the elegance of the framework, several open problems persist. Generalization across goal spaces remains difficult when goals are high-dimensional or semantically rich (images, language). The sparse reward problem, while ameliorated by HER, still limits performance in very long-horizon tasks where even hindsight relabeling cannot bridge the gap. And the interplay between goal-conditioned policies and exploration---how to efficiently discover which goals are \textit{achievable}---remains an active area of research, connecting to the automatic curriculum and intrinsic motivation ideas discussed above.
+\end{remark}
+ 
+\subsection{Contrastive Representations for Temporal Reasoning}
+ 
+The contrastive RL framework above defines positives as \textit{future states sampled at a geometrically distributed horizon}. A natural extension is to ask: can we encode more fine-grained temporal structure into the representation, for example to reason about multi-step relationships or to predict the sequence of states along a trajectory?
+ 
+\begin{concept}[CTRL (Ziarko et al., 2022)]
+    CTRL (\textit{Contrastive Representations for Temporal Reasoning}) extends the contrastive RL framework to capture \textit{multi-hop temporal relationships}. The goal is to learn representations \(\phi : \mathcal{S} \to \mathbb{R}^d\) such that the inner product \(\phi(s)^\top \phi(s')\) is informative about the \textit{temporal distance} between states \(s\) and \(s'\) along the agent's trajectory.
+ 
+    \textbf{Multi-step positive construction.} Rather than sampling a single future state, CTRL defines an \(n\)-step positive pair \((s_t, s_{t+n})\) and a \textit{compositional} positive \((s_t, s_{t+n+m})\) that can be decomposed via an intermediate state \(s_{t+n}\):
+    \[
+        \phi(s_t)^\top \phi(s_{t+n+m}) \approx \sum_u \phi(s_t)^\top \phi(u) \cdot \phi(u)^\top \phi(s_{t+n+m})
+    \]
+    This \textit{compositionality} property requires that the representation space supports a form of temporal chaining: representations should factor across time steps, enabling efficient multi-step planning.
+ 
+    The loss combines a standard InfoNCE contrastive term with a \textit{temporal consistency regularizer} that enforces the compositional structure:
+    \begin{align*}
+        \mathcal{L}_{\text{CTRL}} = \mathcal{L}_{\text{NCE}}(\phi) + \lambda \mathcal{L}_{\text{comp}}(\phi)
+    \end{align*}
+    where \(\mathcal{L}_{\text{comp}}\) penalizes violations of the chaining identity above.
+\end{concept}
+ 
+\begin{remark}
+    \textbf{Why compositionality matters for planning.} In model-based RL and hierarchical RL, the agent must reason about sequences of actions. A representation that satisfies the chaining identity allows the agent to estimate \(n\)-step reachability without rolling out \(n\) environment steps---it can combine \(k\)-step and \((n-k)\)-step predictions algebraically. This is analogous to the way successor representations can be composed: if \(M^\pi = (I - \gamma P^\pi)^{-1}\) is the discounted successor matrix, then multi-step predictions are encoded in \(M^\pi\) itself, and the contrastive representation is approximating this matrix in factored form.
+ 
+    \textbf{Connection to Contrastive RL.} The Eysenbach et al.\ framework from the previous section corresponds to the special case of CTRL where \(n\) is drawn from a geometric distribution and no compositionality constraint is imposed. CTRL can be seen as a structured extension that makes the temporal hierarchy explicit.
+ 
+    \textbf{Practical benefits.} Empirically, CTRL representations transfer more effectively across tasks that share temporal structure but differ in surface appearance. By encoding \textit{how long it takes to get from \(s\) to \(s'\)} rather than just \textit{whether \(s'\) is reachable from \(s\)}, the representation supports richer zero-shot generalization.
+\end{remark}
+ 
+\subsection{Summary and Connections}
+ 
+\begin{remark}
+    The following table situates the six methods covered in this section along two axes: \textit{what the contrastive objective is applied to} (observations vs.\ state-goal pairs vs.\ temporal pairs) and \textit{what it produces} (a better encoder, an intrinsic reward, or an implicit value function).
+ 
+    \begin{center}
+    \begin{tabular}{lccc}
+        \textbf{Method} & \textbf{Positive pairs} & \textbf{Output} & \textbf{Reward type} \\
+        \hline
+        CURL & Augmented views of \(o_t\) & Encoder \(f_\theta\) & Extrinsic \\
+        DIAYN & States + skill categories & Discriminator \(q_\phi(z|s)\) & Intrinsic \\
+        MISL & Trajectory + skill & Trajectory discriminator & Intrinsic \\
+        CIC & States + continuous skills & Dual encoder \((g_\theta, h_\psi)\) & Intrinsic \\
+        Contrastive RL & \((s,a)\) + future states & Value function \(C_\theta\) & Goal-conditioned \\
+        CTRL & Multi-step state pairs & Compositional encoder & Goal / transfer \\
+    \end{tabular}
+    \end{center}
+ 
+    \textbf{The unifying theme.} All six methods train a representation by distinguishing \textit{related pairs} (positive) from \textit{unrelated pairs} (negative). What changes is the definition of relatedness: spatial proximity in observation space (CURL), behavioral identity under a skill (DIAYN, MISL, CIC), or temporal proximity in the agent's trajectory (Contrastive RL, CTRL). The deeper insight, formalized by Eysenbach et al., is that temporal relatedness is not merely a heuristic---it is the exact notion of relatedness that makes contrastive learning equivalent to value function estimation. This gives the entire family a principled foundation: \textit{contrastive RL is TD learning in representation space}.
+\end{remark}
+ 
 \end{document}
