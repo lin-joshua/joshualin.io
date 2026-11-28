@@ -1,0 +1,113 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="description" content="Anthology">
+    <title>Anthology · Joshua Lin</title>
+    <!-- Hide the browser's scrollbar before the first paint; assets/js/scrollbar.js draws a slim one. -->
+    <script>document.documentElement.classList.add("custom-scrollbar");</script>
+    <script>
+      // Arriving from a fall into the black hole, from another page of the
+      // site: fade in from the dark (site.css). The page left the time it
+      // left as a mark.
+      try {
+        var fell = sessionStorage.getItem("arriving-from-fall");
+        if (fell) {
+          sessionStorage.removeItem("arriving-from-fall");
+          if (Date.now() - Number(fell) < 10000) document.documentElement.classList.add("is-arriving");
+        }
+      } catch (error) {}
+    </script>
+    <script src="./assets/js/scrollbar.js" defer></script>
+    <!-- Gargantua behind the page (sky.js); the still starfield only if it cannot be drawn. -->
+    <script src="./assets/js/starfield.js" defer></script>
+    <!-- three.js, only the parts the site uses (tools/three.sh). The modules
+         sky.js loads are fetched now, alongside it, not one after another. -->
+    <script type="importmap">
+      { "imports": { "three": "./assets/js/vendor/three.min.js" } }
+    </script>
+    <link rel="modulepreload" href="./assets/js/vendor/three.min.js">
+    <link rel="modulepreload" href="./assets/js/gargantua.js">
+    <script type="module" src="./assets/js/sky.js" onerror="window.drawStarfield && window.drawStarfield()"></script>
+    <link rel="icon" href="./favicon.ico" sizes="32x32">
+    <link rel="icon" href="./favicon.svg" type="image/svg+xml">
+    <link rel="apple-touch-icon" href="./apple-touch-icon.png">
+    <!-- The fonts (assets/css/fonts.css). The three the page opens with are
+         fetched at once, rather than once the styles have been read. -->
+    <link rel="preload" href="./assets/fonts/alegreya/alegreya-normal-400-700-latin.woff2" as="font" type="font/woff2" crossorigin>
+    <link rel="preload" href="./assets/fonts/alegreya/alegreya-italic-400-700-latin.woff2" as="font" type="font/woff2" crossorigin>
+    <link rel="preload" href="./assets/fonts/alegreya/alegreya-sc-normal-500-latin.woff2" as="font" type="font/woff2" crossorigin>
+    <link rel="stylesheet" href="./assets/css/fonts.css">
+    <link rel="stylesheet" href="./assets/css/site.css">
+    <link rel="stylesheet" href="./assets/css/anthology.css">
+  </head>
+  <body>
+    <div class="page-shell">
+      <header class="site-header">
+        <nav class="site-nav" aria-label="Site links">
+          <a href="./">Joshua Lin</a>
+          <span aria-current="page">Anthology</span>
+        </nav>
+      </header>
+
+      <div class="page-header">
+        <h1>Anthology</h1>
+      </div>
+
+      <main class="book-list" aria-label="The anthology">
+        <h2 id="anthology/music">Music</h2>
+        <ul class="contents">
+          <li><span class="work">Schubert, <a class="recording" href="https://www.youtube.com/watch?v=FxhbAGwEYGQ" target="_blank" rel="noopener" data-recording title="Listen on YouTube"><i>Impromptu No. 3</i></a></span><span class="leader" aria-hidden="true"></span><span class="creator">Horowitz</span></li>
+          <li><span class="work">Chopin, <a class="recording" href="https://www.youtube.com/watch?v=V0gwZxnpYNU" target="_blank" rel="noopener" data-recording title="Listen on YouTube"><i>Romance</i></a> from Piano Concerto No. 1</span><span class="leader" aria-hidden="true"></span><span class="creator">Zimerman</span></li>
+          <li><span class="work">Chopin, <a class="recording" href="https://www.youtube.com/watch?v=XcXEL-D-M5Q" target="_blank" rel="noopener" data-recording title="Listen on YouTube"><i>Piano Concerto No. 1</i></a></span><span class="leader" aria-hidden="true"></span><span class="creator">Kobayashi</span></li>
+          <li><span class="work">Rachmaninoff, <a class="recording" href="https://www.youtube.com/watch?v=ygfLNLs2IBU" target="_blank" rel="noopener" data-recording title="Listen on YouTube"><i>Piano Concerto No. 2</i></a></span><span class="leader" aria-hidden="true"></span><span class="creator">Richter</span></li>
+          <li><span class="work">Rachmaninoff, <a class="recording" href="https://www.youtube.com/watch?v=CHbf1CSUFvI" target="_blank" rel="noopener" data-recording title="Listen on YouTube"><i>Piano Concerto No. 3</i></a></span><span class="leader" aria-hidden="true"></span><span class="creator">Horowitz</span></li>
+          <li><span class="work">Ravel, <a class="recording" href="https://www.youtube.com/watch?v=W1hyEjZros8" target="_blank" rel="noopener" data-recording title="Listen on YouTube"><i>Adagio assai</i></a> from Piano Concerto in G</span><span class="leader" aria-hidden="true"></span><span class="creator">Zimerman</span></li>
+          <li><span class="work">Schumann, <a class="recording" href="https://www.youtube.com/watch?v=sM9iSRm97Ws&amp;t=743s" target="_blank" rel="noopener" data-recording title="Listen on YouTube"><i>Andante cantabile</i></a> from Piano Quartet</span><span class="leader" aria-hidden="true"></span><span class="creator">Goerner</span></li>
+          <li><span class="work">Chopin, <a class="recording" href="https://www.youtube.com/watch?v=A3Wriv-QEtE" target="_blank" rel="noopener" data-recording title="Listen on YouTube"><i>Ballade No. 4</i></a></span><span class="leader" aria-hidden="true"></span><span class="creator">Zimerman</span></li>
+          <li><span class="work">Tchaikovsky, <a class="recording" href="https://www.youtube.com/watch?v=L-xcN_5rKK8" target="_blank" rel="noopener" data-recording title="Listen on YouTube"><i>Pas de deux</i></a> from The Nutcracker</span><span class="leader" aria-hidden="true"></span><span class="creator">Rattle</span></li>
+          <li><span class="work">Schumann (arr. Liszt), <a class="recording" href="https://www.youtube.com/watch?v=8fEKx1Qa7kQ" target="_blank" rel="noopener" data-recording title="Listen on YouTube"><i>Widmung</i></a> from Myrthen</span><span class="leader" aria-hidden="true"></span><span class="creator">Bolet</span></li>
+        </ul>
+        <h2 id="anthology/books">Books</h2>
+        <ul class="contents">
+          <li><span class="work">“The Last Question”<span class="year">1956</span></span><span class="leader" aria-hidden="true"></span><span class="creator">Isaac Asimov</span></li>
+          <li><span class="work">“Story of Your Life”<span class="year">1998</span></span><span class="leader" aria-hidden="true"></span><span class="creator">Ted Chiang</span></li>
+        </ul>
+        <ul class="contents">
+          <li><span class="work"><i>Foundation</i><span class="year">1951</span></span><span class="leader" aria-hidden="true"></span><span class="creator">Isaac Asimov</span></li>
+          <li><span class="work"><i>Dune</i><span class="year">1965</span></span><span class="leader" aria-hidden="true"></span><span class="creator">Frank Herbert</span></li>
+          <li class="series"><details><summary><span class="work"><i>The Three-Body Problem</i><span class="year">2006</span></span><span class="leader" aria-hidden="true"></span><span class="creator">Liu Cixin</span></summary><ol class="vol-list">
+            <li><i>The Three-Body Problem</i><span class="year">2006</span></li>
+            <li><i>The Dark Forest</i><span class="year">2008</span></li>
+            <li><i>Death’s End</i><span class="year">2010</span></li>
+          </ol></details></li>
+          <li class="series"><details><summary><span class="work"><i>Revelation Space</i><span class="year">2000</span></span><span class="leader" aria-hidden="true"></span><span class="creator">Alastair Reynolds</span></summary><ol class="vol-list">
+            <li><i>Revelation Space</i><span class="year">2000</span></li>
+            <li><i>Chasm City</i><span class="year">2001</span></li>
+            <li><i>Redemption Ark</i><span class="year">2002</span></li>
+          </ol></details></li>
+          <li class="series"><details><summary><span class="work"><i>The Wheel of Time</i><span class="year">1990</span></span><span class="leader" aria-hidden="true"></span><span class="creator">Robert Jordan</span></summary><ol class="vol-list">
+            <li><i>The Eye of the World</i><span class="year">1990</span></li>
+            <li><i>The Great Hunt</i><span class="year">1990</span></li>
+            <li><i>The Dragon Reborn</i><span class="year">1991</span></li>
+            <li><i>The Shadow Rising</i><span class="year">1992</span></li>
+            <li><i>The Fires of Heaven</i><span class="year">1993</span></li>
+            <li><i>Lord of Chaos</i><span class="year">1994</span></li>
+            <li><i>A Crown of Swords</i><span class="year">1996</span></li>
+          </ol></details></li>
+        </ul>
+        <h2 id="anthology/films">Films</h2>
+        <ul class="contents">
+          <li><span class="work"><i>The Truman Show</i><span class="year">1998</span></span><span class="leader" aria-hidden="true"></span><span class="creator">Peter Weir</span></li>
+          <li><span class="work"><i>Interstellar</i><span class="year">2014</span></span><span class="leader" aria-hidden="true"></span><span class="creator">Christopher Nolan</span></li>
+          <li class="series"><details><summary><span class="work"><i>Dune</i><span class="year">2021, 2024</span></span><span class="leader" aria-hidden="true"></span><span class="creator">Denis Villeneuve</span></summary><ol class="vol-list">
+            <li><i>Dune</i><span class="year">2021</span></li>
+            <li><i>Dune: Part Two</i><span class="year">2024</span></li>
+          </ol></details></li>
+          <li><span class="work"><i>A Beautiful Mind</i><span class="year">2001</span></span><span class="leader" aria-hidden="true"></span><span class="creator">Ron Howard</span></li>
+        </ul>
+      </main>
+    </div>
+  </body>
+</html>

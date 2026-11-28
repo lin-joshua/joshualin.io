@@ -1,0 +1,75 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta
+      name="description"
+      content="Homepage"
+    >
+    <title>Joshua Lin</title>
+    <!-- Hide the browser's scrollbar before the first paint; assets/js/scrollbar.js draws a slim one. -->
+    <script>document.documentElement.classList.add("custom-scrollbar");</script>
+    <script>
+      // Arriving from a fall into the black hole, from another page of the
+      // site: fade in from the dark (site.css). The page left the time it
+      // left as a mark.
+      try {
+        var fell = sessionStorage.getItem("arriving-from-fall");
+        if (fell) {
+          sessionStorage.removeItem("arriving-from-fall");
+          if (Date.now() - Number(fell) < 10000) document.documentElement.classList.add("is-arriving");
+        }
+      } catch (error) {}
+    </script>
+    <script src="./assets/js/scrollbar.js" defer></script>
+    <!-- Gargantua behind the page (sky.js); the still starfield only if it cannot be drawn. -->
+    <script src="./assets/js/starfield.js" defer></script>
+    <!-- three.js, only the parts the site uses (tools/three.sh). The modules
+         sky.js loads are fetched now, alongside it, not one after another. -->
+    <script type="importmap">
+      { "imports": { "three": "./assets/js/vendor/three.min.js" } }
+    </script>
+    <link rel="modulepreload" href="./assets/js/vendor/three.min.js">
+    <link rel="modulepreload" href="./assets/js/gargantua.js">
+    <script type="module" src="./assets/js/sky.js" onerror="window.drawStarfield && window.drawStarfield()"></script>
+    <link rel="icon" href="./favicon.ico" sizes="32x32">
+    <link rel="icon" href="./favicon.svg" type="image/svg+xml">
+    <link rel="apple-touch-icon" href="./apple-touch-icon.png">
+    <!-- The fonts (assets/css/fonts.css). The two the page opens with are
+         fetched at once, rather than once the styles have been read. -->
+    <link rel="preload" href="./assets/fonts/alegreya/alegreya-normal-400-700-latin.woff2" as="font" type="font/woff2" crossorigin>
+    <link rel="preload" href="./assets/fonts/alegreya/alegreya-sc-normal-500-latin.woff2" as="font" type="font/woff2" crossorigin>
+    <link rel="stylesheet" href="./assets/css/fonts.css">
+    <link rel="stylesheet" href="./assets/css/site.css">
+  </head>
+  <body>
+    <div class="page-shell">
+      <header class="site-header">
+        <nav class="site-nav" aria-label="Site links">
+          <span class="site-name">Joshua Lin</span>
+          <a href="./anthology.html">Anthology</a>
+        </nav>
+      </header>
+
+      <main>
+        <section aria-labelledby="about-title">
+          <h2 id="about-title">About</h2>
+
+          <p>
+            I'm Joshua (<span lang="zh-Hant">林鴻彬</span>), a math undergraduate at Princeton. I 
+            work on self-supervised reinforcement learning with Ben Eysenbach, as well as 
+            pre-training for the Tiger Foundation Model Group. Previously, I was advised by Elad 
+            Hazan on aligning foundation models via mechanism design. 
+          </p>
+
+          <p>
+            In my free time, I enjoy reading science fiction, philosophy, and classical literature.
+            Lately, I've picked up <i>The Brothers Karamazov</i> by Dostoevsky, <i>Flowers for 
+            Algernon</i> by Daniel Keyes, and <i>The Left Hand of Darkness</i> by Ursula K. Le Guin. 
+          </p>
+        </section>
+      </main>
+    </div>
+  </body>
+</html>

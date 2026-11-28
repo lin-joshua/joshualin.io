@@ -1,0 +1,97 @@
+/* The anthology page (anthology.html): what its list needs beyond the table
+   of contents in site.css: links to recordings, years, and series that open
+   to their volumes. */
+
+/* A piece's title links to its recording. The underline is faint, so the
+   list still reads as a table of contents. */
+.contents a.recording {
+  text-decoration-color: color-mix(in srgb, currentColor 28%, transparent);
+}
+
+.contents a.recording:hover {
+  opacity: 1;
+  text-decoration-color: currentColor;
+}
+
+.book-list .year {
+  margin-left: 0.6ch;
+  font-size: 0.8125rem;
+  opacity: 0.5;
+}
+
+/* A dagger after a book being read now. */
+.now-mark {
+  margin-left: 0.15ch;
+  font-size: 0.75em;
+  vertical-align: 0.35em;
+}
+
+/* Series rows open to show their volumes. */
+.contents li.series {
+  display: block;
+}
+
+.contents summary {
+  display: flex;
+  align-items: baseline;
+  gap: 1ch;
+  list-style: none;
+  cursor: pointer;
+}
+
+.contents summary::-webkit-details-marker {
+  display: none;
+}
+
+.contents .vols {
+  font-size: 0.875rem;
+  opacity: 0.5;
+  white-space: nowrap;
+}
+
+.contents summary:hover .vols,
+.contents details[open] .vols {
+  opacity: 0.9;
+}
+
+.contents .vol-list {
+  margin: calc(var(--line) / 4) 0 calc(var(--line) / 2) 3ch;
+  padding: 0;
+  columns: 2;
+  column-gap: 3ch;
+  list-style: lower-roman inside;
+  font-size: 0.9375rem;
+  opacity: 0.75;
+}
+
+.contents .vol-list li {
+  display: list-item;
+  break-inside: avoid;
+}
+
+.contents .vol-list li::before {
+  content: none;
+}
+
+.contents .vol-list li::marker {
+  font-size: 0.8125rem;
+}
+
+@media (max-width: 480px) {
+  .contents summary {
+    flex-wrap: wrap;
+    row-gap: 0;
+  }
+
+  .contents summary .work {
+    flex-basis: 100%;
+  }
+
+  .contents summary .leader {
+    margin-left: 2ch;
+  }
+
+  .contents .vol-list {
+    columns: 1;
+  }
+}

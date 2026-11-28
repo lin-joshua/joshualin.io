@@ -1,0 +1,433 @@
+:root {
+  color-scheme: dark;
+  --background: #171717;
+  --text: #e8e6df;
+  /* Alegreya has no Chinese characters, so the browser falls through to
+     LXGW WenKai GB Screen for them. Latin text stays in Alegreya. */
+  --font-text: "Alegreya", "LXGW WenKai GB Screen", "Palatino Linotype", Palatino,
+    "Book Antiqua", serif;
+  --font-caps: "Alegreya SC", "Alegreya", "LXGW WenKai GB Screen", serif;
+  /* One line of text. All vertical spacing is a multiple of this. */
+  --line: 1.2rem;
+  --scrollbar: color-mix(in srgb, var(--text) 22%, transparent);
+  --scrollbar-hover: color-mix(in srgb, var(--text) 45%, transparent);
+}
+
+* {
+  box-sizing: border-box;
+}
+
+html {
+  background: var(--background);
+  font-size: 16px;
+}
+
+/* Scrollbar. scrollbar.js draws a slim bar that floats in from the window edge
+   and fades out when the page is not scrolling. The browser's own scrollbar is
+   hidden only when that script can run (a line in each page's <head> adds the class early), so
+   without JavaScript the normal scrollbar stays. Scrolling itself is native. */
+html.custom-scrollbar {
+  scrollbar-width: none;
+}
+
+html.custom-scrollbar::-webkit-scrollbar {
+  display: none;
+}
+
+.scrollbar {
+  position: fixed;
+  top: 10px;
+  right: 5px;
+  bottom: 10px;
+  z-index: 10;
+  /* Wider than the visible bar, so it is easy to grab. */
+  width: 14px;
+  opacity: 0;
+  transition: opacity 500ms ease;
+}
+
+.scrollbar.is-visible {
+  opacity: 1;
+  transition-duration: 120ms;
+}
+
+.scrollbar.is-unneeded {
+  display: none;
+}
+
+.scrollbar-thumb {
+  position: absolute;
+  top: 0;
+  right: 4px;
+  width: 4px;
+  border-radius: 999px;
+  background: var(--scrollbar);
+  touch-action: none;
+  transition: width 150ms ease, background-color 150ms ease;
+}
+
+.scrollbar:hover .scrollbar-thumb,
+.scrollbar.is-dragging .scrollbar-thumb {
+  width: 7px;
+  background: var(--scrollbar-hover);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .scrollbar,
+  .scrollbar-thumb {
+    transition: none;
+  }
+}
+
+@media print {
+  .scrollbar {
+    display: none;
+  }
+}
+
+body {
+  margin: 0;
+  /* The page's colour is the <html> element's, so that the sky
+     (.starfield) can sit between it and the text. */
+  background: transparent;
+  color: var(--text);
+  font-family: var(--font-text);
+  /* Never fake italic or bold. Alegreya has real italics; WenKai has none,
+     so Chinese inside <i> stays upright instead of being slanted. */
+  font-synthesis: none;
+  font-size: 1rem;
+  font-weight: 450;
+  font-variant-numeric: oldstyle-nums;
+  line-height: var(--line);
+  text-rendering: optimizeLegibility;
+  -webkit-font-smoothing: antialiased;
+}
+
+/* Behind the text, Gargantua (assets/js/sky.js), or, where it cannot be
+   drawn, a still night sky (assets/js/starfield.js). Each fades in once
+   drawn. Without JavaScript the page keeps its plain background.
+
+   Each is as tall as the window at its tallest (100lvh; 100vh where lvh is
+   not known, which phones' browsers also take as the tallest). A phone's
+   browser shows and hides its toolbars as the page scrolls, and the window
+   changes height each time; a sky the height of the window would then be
+   drawn afresh each time, mid-scroll. While the toolbars show, they cover
+   its foot. */
+.sky,
+.starfield {
+  position: fixed;
+  top: 0;
+  left: 0;
+  z-index: -1;
+  width: 100%;
+  height: 100vh;
+  height: 100lvh;
+  pointer-events: none;
+  opacity: 0;
+  transition: opacity 900ms ease;
+}
+
+.sky {
+  transition-duration: 1500ms;
+}
+
+.sky.is-drawn,
+.starfield.is-drawn {
+  opacity: 1;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .sky,
+  .starfield {
+    transition: none;
+  }
+}
+
+@media print {
+  .sky,
+  .starfield {
+    display: none;
+  }
+}
+
+/* Leaving a page for another, the view falls into the black hole (sky.js,
+   and space.js in the library): the page's words fade away, then the view
+   goes dark, and the next page fades in from the dark. */
+.fall-veil {
+  position: fixed;
+  inset: 0;
+  z-index: 40;
+  background: #000;
+  opacity: 0;
+  pointer-events: none;
+}
+
+.fall-veil.is-lifting {
+  transition: opacity 1100ms ease 100ms;
+}
+
+:root.is-falling .page-shell,
+:root.is-falling .scrollbar {
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 450ms ease;
+}
+
+/* Arriving from a fall into the black hole, a page fades in from the dark
+   the fall ended in. A line in the page's <head> adds the class, from a mark
+   the page fallen from leaves in sessionStorage. */
+html.is-arriving::after {
+  content: "";
+  position: fixed;
+  inset: 0;
+  z-index: 40;
+  background: #000;
+  pointer-events: none;
+  animation: arrive 1100ms ease 100ms both;
+}
+
+@keyframes arrive {
+  from {
+    opacity: 1;
+  }
+  to {
+    opacity: 0;
+  }
+}
+
+/* The page column. Extra space at the bottom so the last line does not sit on the window edge. */
+.page-shell {
+  width: 100%;
+  max-width: calc(66ch + 6ch);
+  margin-inline: auto;
+  padding: calc(var(--line) * 2) 3ch calc(var(--line) * 4);
+}
+
+/* Header: the name and links. */
+
+.site-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--line);
+}
+
+.site-nav {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  gap: 0 var(--line);
+  font-family: var(--font-caps);
+  font-size: 1.125rem;
+  font-weight: 500;
+  line-height: var(--line);
+  letter-spacing: 0.075em;
+  text-transform: lowercase;
+}
+
+/* Content */
+
+/* Page title, used on pages other than the home page. */
+.page-header {
+  margin: calc(var(--line) * 3) 0;
+}
+
+h1 {
+  margin: 0;
+  font-family: var(--font-caps);
+  font-size: 2.5rem;
+  font-weight: 500;
+  line-height: calc(var(--line) * 2);
+  letter-spacing: 0.05em;
+  text-transform: lowercase;
+}
+
+h2 {
+  margin: calc(var(--line) * 2) 0 var(--line);
+  font-family: var(--font-caps);
+  font-size: 1.25rem;
+  font-weight: 400;
+  line-height: var(--line);
+  letter-spacing: 0.125em;
+  text-transform: lowercase;
+}
+
+/* The page title already leaves space above the first heading. */
+.page-header + main > h2:first-child {
+  margin-top: 0;
+}
+
+p {
+  margin: 0;
+}
+
+p + p {
+  margin-top: var(--line);
+}
+
+ul {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+ul li::before {
+  content: "•";
+  margin-right: 1ch;
+}
+
+blockquote {
+  margin: var(--line) 3ch;
+}
+
+blockquote p:first-of-type::before {
+  content: "“";
+}
+
+blockquote p:last-of-type::after {
+  content: "”";
+}
+
+blockquote footer {
+  margin-top: var(--line);
+}
+
+blockquote .author {
+  font-family: var(--font-caps);
+  font-size: 1.125em;
+  letter-spacing: 0.075em;
+  text-transform: lowercase;
+}
+
+blockquote cite {
+  font-style: italic;
+}
+
+/* Anthology lists, styled like a book's table of contents:
+   italic title, dotted leader, creator in small caps on the right. */
+.contents li {
+  display: flex;
+  align-items: baseline;
+  gap: 1ch;
+}
+
+.contents li::before {
+  content: none;
+}
+
+/* Groups within one section are separated by a blank line. */
+.contents + .contents {
+  margin-top: var(--line);
+}
+
+.contents .leader {
+  flex: 1;
+  min-width: 2ch;
+  border-bottom: 1px dotted currentColor;
+  opacity: 0.35;
+  transform: translateY(-0.3em);
+}
+
+.contents .creator {
+  font-family: var(--font-caps);
+  letter-spacing: 0.05em;
+  text-transform: lowercase;
+  text-align: right;
+}
+
+/* On a long line, the title and the creator each wrap within their own side,
+   so the leader always joins them on the first line. */
+.contents .work {
+  flex: 0 1 auto;
+}
+
+.contents .creator {
+  flex: 0 1 auto;
+  max-width: 50%;
+}
+
+/* Quotes set like a book's epigraph: indented, attribution on the right. */
+blockquote.epigraph {
+  margin: var(--line) 0 var(--line) 12ch;
+}
+
+blockquote.epigraph footer {
+  margin-top: calc(var(--line) / 3);
+  text-align: right;
+}
+
+/* Balance line breaks so a quote never ends on a single word. */
+blockquote.epigraph p {
+  font-style: italic;
+  text-wrap: pretty;
+}
+
+/* Keep each attribution close to its own quote and further from the next. */
+blockquote.epigraph + blockquote.epigraph {
+  margin-top: calc(var(--line) * 1.75);
+}
+
+a {
+  color: inherit;
+  text-decoration: underline;
+  text-decoration-thickness: 1px;
+  text-underline-offset: 3px;
+  transition: opacity 160ms ease;
+}
+
+a:hover {
+  opacity: 0.65;
+}
+
+a:focus-visible {
+  outline: 2px solid var(--text);
+  outline-offset: 3px;
+}
+
+@media (max-width: 480px) {
+  html {
+    font-size: 14px;
+  }
+
+  .page-shell {
+    padding-inline: 1.5ch;
+  }
+
+  .site-header {
+    align-items: flex-start;
+  }
+
+  blockquote.epigraph {
+    margin-left: 4ch;
+  }
+
+  /* Narrow screens: the work gets its own line, and the leader runs to the
+     creator on the line below, so neither side is squeezed. */
+  .contents li {
+    flex-wrap: wrap;
+    row-gap: 0;
+  }
+
+  .contents li + li {
+    margin-top: calc(var(--line) / 3);
+  }
+
+  .contents .work {
+    flex-basis: 100%;
+  }
+
+  .contents .leader {
+    margin-left: 2ch;
+  }
+
+  .contents .creator {
+    max-width: 75%;
+  }
+}
+
+/* WenKai's characters fill the whole em square, so at the same font size they
+   look larger than Alegreya's letters. Shrink them to match. Mark Chinese text
+   with lang="zh-Hant" (or "zh-Hans") so this applies. */
+:lang(zh) {
+  font-size: 0.85em;
+}
